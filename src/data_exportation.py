@@ -5,6 +5,7 @@ import requests
 #from flask import request, Response
 #from src.helpers.json_response import asJsonResponse
 import re
+from bs4 import BeautifulSoup
 
 
 
@@ -56,11 +57,20 @@ def get_pages_students(i=1):
 
 
 
-#Pendiente sacar los valores correctos de meme y times
+#Pendiente sacar los valores correctos de meme y times. Y buscar nombre en comentarios
 def get_student(data,i=0): 
     lab=re.search(r'[lab-].*\]',data[i]['title']).group().split(']')[0]
     if data[i]['assignees'][0]['login']:
         instructor=data[i]['assignees'][0]['login']
+    """
+
+    Pendiente sacar meme
+    comment=requests.get(data[i]['comments_url']).json()
+    soup = BeautifulSoup(requests.get(comment[i]['html_url']).text, 'html.parser')
+    meme=soup.select('div.edit-comment-hide a img')
+
+    """
+
     """
     Pendiente mirar cómo sacar info:
     pull_request_close_day=re.search(r'\d{4}\-\d{2}\-\d{2}',data[i]['closed_at']).group()
