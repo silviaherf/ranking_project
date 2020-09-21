@@ -58,14 +58,15 @@ def get_pages_students(i=1):
 
 #Pendiente sacar los valores correctos de meme,lab y times
 def get_student(data,i=0): 
-    
+    lab=re.search(r'[lab-].*\]',data[i]['title']).group().split(']')[0]
     return {
         'name':data[i]['user']['login'],
         'join':'buscar @',
         'comentario':'buscar nombre',
-        'lab': data[i]['title'],
+        'lab': lab,
         'pull_request':data[i]['id'],
         'pull_request_status':data[i]['state'],
+        'instructor': data[i]['assignees'][0]['login'] ,
         'pull_request_close_time': data[i]['closed_at'],
         'last_commit_time': data[i]['updated_at'],
         'meme':data[i]['title']

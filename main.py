@@ -4,8 +4,9 @@ import re
 
 def main():
   
-   
-    students=api.get_pages_students()
+    students=api.get_url().json()
+    
+   # students=api.get_pages_students()
 
 
     print(len(students))
