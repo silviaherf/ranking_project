@@ -36,25 +36,25 @@ def get_url(i=1,api_key=os.getenv('GH_APIKEY')):
         return res
 
 
-"""
-def get_pr():
 
+def get_pages_students(i=1):
+    """
         This function takes out every page of pull requests from the previuos get_url query
-
-    response=get_url()
-
-    print('Loading page 1')
-
-    i=2
-    while len(re.findall('last',response.headers['link']))==0:
+    """
+    students=[]
+    n_pages=int(re.search(r'\d{2}',re.search(r'\d{2}\>\;\srel="last"',get_url(i=1).headers['link']).group()).group())
+    for page in range(i,n_pages):
         try:
-            print(f'Loading page {i+1}')
-            reviews=(get_url(i=i))
-            i+=1
+            print(f'Loading page {page}')
+            data=get_url(i=page).json()
+            students.append([get_student(data,i=j) for j in range(0,len(data))])
             
         except ValueError:
-            break
-"""
+            raise ValueError
+    return students
+
+
+
 
 #Pendiente sacar los valores correctos de meme,lab y times
 def get_student(data,i=0): 
@@ -62,7 +62,7 @@ def get_student(data,i=0):
     return {
         'name':data[i]['user']['login'],
         'join':'buscar @',
-        'comentario':'buscar nombre'
+        'comentario':'buscar nombre',
         'lab': data[i]['title'],
         'pull_request':data[i]['id'],
         'pull_request_status':data[i]['state'],
