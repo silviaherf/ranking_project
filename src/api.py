@@ -56,9 +56,19 @@ def get_pages_students(i=1):
 
 
 
-#Pendiente sacar los valores correctos de meme,lab y times
+#Pendiente sacar los valores correctos de meme y times
 def get_student(data,i=0): 
     lab=re.search(r'[lab-].*\]',data[i]['title']).group().split(']')[0]
+    if data[i]['assignees'][0]['login']:
+        instructor=data[i]['assignees'][0]['login']
+    """
+    Pendiente mirar cómo sacar info:
+    pull_request_close_day=re.search(r'\d{4}\-\d{2}\-\d{2}',data[i]['closed_at']).group()
+    pull_request_close_time=re.search(r'\d{2}\:\d{2}\:\d{2}',data[i]['closed_at']).group()
+    pull_request_created_day=re.search(r'\d{4}\-\d{2}\-\d{2}',data[i]['created_at']).group()
+    pull_request_created_time=re.search(r'\d{2}\:\d{2}\:\d{2}',data[i]['created_at']).group()
+
+    """
     return {
         'name':data[i]['user']['login'],
         'join':'buscar @',
@@ -66,7 +76,7 @@ def get_student(data,i=0):
         'lab': lab,
         'pull_request':data[i]['id'],
         'pull_request_status':data[i]['state'],
-        'instructor': data[i]['assignees'][0]['login'] ,
+        'instructor': instructor ,
         'pull_request_close_time': data[i]['closed_at'],
         'last_commit_time': data[i]['updated_at'],
         'meme':data[i]['title']
