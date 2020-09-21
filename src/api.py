@@ -56,19 +56,22 @@ def get_pr():
             break
 """
 
-#Pendiente sacar los valores correctos
+#Pendiente sacar los valores correctos de meme,lab y times
 def get_student(data,i=0): 
     
     return {
-        'name':data[i]['title'],
+        'name':data[i]['user']['login'],
+        'join':'buscar @',
+        'comentario':'buscar nombre'
         'lab': data[i]['title'],
-        'pull_request':data[i]['title'],
+        'pull_request':data[i]['id'],
+        'pull_request_status':data[i]['state'],
+        'pull_request_close_time': data[i]['closed_at'],
+        'last_commit_time': data[i]['updated_at'],
         'meme':data[i]['title']
 
     }
 
-
- #for i in len(data)
 """
 
 @app.route("/student/create/<studentname>")

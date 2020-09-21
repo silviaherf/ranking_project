@@ -7,9 +7,10 @@ def main():
     data=api.get_url(i=1).json()
     students = [api.get_student(data,i=j) for j in range(0,len(data))]
 
-   
     i=2
-    while len(re.findall('last',api.get_url(i=i).headers['link']))==0:
+    """revisar regex
+    num=re.findall(r'\d{2}\>\;\srel="last"',response.headers['link'])
+    for i in range(0,num):
         try:
             print(f'Loading page {i-1}')
             data=api.get_url(i=i).json()
@@ -17,10 +18,10 @@ def main():
             i+=1
             
         except ValueError:
-            break
+            raise ValueError
 
-
-    print(students)
+"""
+    print(len(students))
 
 
 if __name__=="__main__":
