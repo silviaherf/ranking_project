@@ -2,8 +2,7 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 import requests
-from src.app import app
-from flask import request, Response
+#from flask import request, Response
 #from src.helpers.json_response import asJsonResponse
 import re
 from src.database import db
@@ -15,7 +14,7 @@ def get_url(i=1,api_key=os.getenv('GH_APIKEY')):
     This function gets information out of an API for the year previously entered as a terminal argument.
     """
     baseUrl="https://api.github.com"
-    endpoint=f'/repos/ironhack-datalabs/datamad0820/pulls?state=closed&page={i}'
+    endpoint=f'/repos/ironhack-datalabs/datamad0820/pulls?state=all&page={i}'
     url = f"{baseUrl}{endpoint}"
 
 
@@ -23,11 +22,11 @@ def get_url(i=1,api_key=os.getenv('GH_APIKEY')):
         "Authorization": f"Bearer {api_key}"
     }
 
-    res = requests.get(url, params=query_params)
+    res = requests.get(url, headers=headers)
     #res = requests.get(url, params=query_params, headers=headers)
     print(f"Request data to {res.url} status_code:{res.status_code}")
     
-     if res.status_code != 200:
+    if res.status_code != 200:
         
         raise ValueError(f'Invalid Github API call: {data["message"]}\nSee more in {data["documentation_url"]}')
         
@@ -39,9 +38,9 @@ def get_url(i=1,api_key=os.getenv('GH_APIKEY')):
 
 """
 def get_pr():
-    """
-        This function takes out every page of pull requests from the previuos get_url query"
-    """
+
+        This function takes out every page of pull requests from the previuos get_url query
+
     response=get_url()
 
     print('Loading page 1')
@@ -58,9 +57,9 @@ def get_pr():
 """
 
 #Pendiente sacar los valores correctos
-def get_student(res,i=0): 
-    data=res.json()
-    return student={
+def get_student(data,i=0): 
+    
+    return {
         'name':data[i]['title'],
         'lab': data[i]['title'],
         'pull_request':data[i]['title'],
@@ -69,7 +68,7 @@ def get_student(res,i=0):
     }
 
 
- for i in len(data)
+ #for i in len(data)
 """
 
 @app.route("/student/create/<studentname>")
