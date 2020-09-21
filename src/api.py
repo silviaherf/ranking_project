@@ -9,7 +9,7 @@ import re
 from src.database import db
 
 
-def get_pr(i=0,api_key=os.getenv('GH_APIKEY'),i=1):
+def get_url(i=1,api_key=os.getenv('GH_APIKEY')):
     
     """
     This function gets information out of an API for the year previously entered as a terminal argument.
@@ -37,7 +37,39 @@ def get_pr(i=0,api_key=os.getenv('GH_APIKEY'),i=1):
         return res
 
 
+"""
+def get_pr():
+    """
+        This function takes out every page of pull requests from the previuos get_url query"
+    """
+    response=get_url()
 
+    print('Loading page 1')
+
+    i=2
+    while len(re.findall('last',response.headers['link']))==0:
+        try:
+            print(f'Loading page {i+1}')
+            reviews=(get_url(i=i))
+            i+=1
+            
+        except ValueError:
+            break
+"""
+
+#Pendiente sacar los valores correctos
+def get_student(res,i=0): 
+    data=res.json()
+    return student={
+        'name':data[i]['title'],
+        'lab': data[i]['title'],
+        'pull_request':data[i]['title'],
+        'meme':data[i]['title']
+
+    }
+
+
+ for i in len(data)
 """
 
 @app.route("/student/create/<studentname>")
