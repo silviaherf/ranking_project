@@ -1,14 +1,15 @@
 import src.api as api 
 
+
 def main():
     response=api.get_pr()
 
     print('Loading page 1')
 
-    """
-    reviews=api.api_to_df(response)
-    i=1
-    while response['has_more']==True:
+    
+    
+    i=2
+    while len(re.findall('last',response.headers['link']))==0:
         try:
             print(f'Loading page {i+1}')
             reviews=reviews.append(api.api_to_df(api.get_pr(args,i=i))).reset_index()
