@@ -1,11 +1,10 @@
-import src.api as api 
-import re
+import src.data_exportation as export
 
 
 def main():
   
-    students=api.get_url().json()
-    
+    students=export.get_url().json()
+
    # students=api.get_pages_students()
 
 
