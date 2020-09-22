@@ -127,6 +127,7 @@ def get_lab(data,i=0):
     """
 
     lab=re.search(r'[lab-].*\]',data[i]['title']).group().split(']')[0]
+    lab_prefix=re.search(r'lab-\w+',lab).group()
            
     if data[i]['state']=='closed':
         pull_request_closed_day=re.search(r'\d{4}\-\d{2}\-\d{2}',data[i]['closed_at']).group()
@@ -147,6 +148,7 @@ def get_lab(data,i=0):
     dic={
 
         'lab': lab,
+        'lab_prefix':lab_prefix,
         'pull_request':data[i]['id'],
         'pull_request_status':data[i]['state'],
         'instructor': instructor ,
@@ -180,3 +182,5 @@ def student_toMongo(student):
     return db.students.insert_one(student)
     
 
+def lab_toMongo(lab):
+    return db.labs.insert_one(lab)

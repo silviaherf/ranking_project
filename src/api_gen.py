@@ -37,46 +37,27 @@ def allStudents():
 
 
 
-
-
-
-
-"""
-
-@app.route("/lab/create")
-#@asJsonResponse
-def searchLab(lab-prefix):
-    
-    if not lab-prefix:
-        # Set status code to 400 BAD REQUEST
+@app.route("/lab/create/<lab_prefix>")
+def searchLab(lab_prefix):
+    if not lab_prefix:
         return {
             "status": "error",
-            "message": "Any student in query , please specify one"
+            "message": "Any lab-prefix in query , please specify one"
         }, 400
 
-    # Search a company in mongodb database
-    projection = {"name": 1, "category_code": 1,"description":1}
-    searchRE = re.compile(f"{companyNameQuery}", re.IGNORECASE)
-    foundStudent = db["crunchbase"].find_one(
-        {"name": searchRE}, projection)
-
-    if not foundStudent:
-        # Set status code to 404 NOT FOUND
-        return {
-            "status": "not found",
-            "message": f"No student found with name {foundStudent} in database"
-        }, 404
-
-    return {
-        "status": "OK",
-        "searchQuery": lab-prefix,
-        "student": foundStudent
-    }
-
+    if db.labs.find_one({"lab": lab_prefix}):
+        return 'This lab is already on MongoDB'
+    else:
+        lab=export.lab_toMongo(lab)
+        return {"_id": lab.inserted_id}
 """
 
+(GET) /lab/<lab_id>/search
+Purpose: Search student submissions on specific lab
+Params: user_id
+Returns: See Lab analysis section
 
-
+"""
 """
 
 @app.route("/lab/<lab_id>/search")
@@ -112,6 +93,12 @@ def searchLab(lab-prefix):
 """
 """
 
+(GET) /lab/memeranking
+Purpose: Ranking of the most used memes for datamad0820 divided by labs
+"""
+
+"""
+
 @app.route("/lab/memeranking")
 #@asJsonResponse
 def searchLab(lab-prefix):
@@ -144,7 +131,12 @@ def searchLab(lab-prefix):
 
 """
 
+"""
+(GET) /lab/<lab_id>/meme
+Purpose: Get a random meme (extracted from the ones used for each student pull request) for that lab.
 
+
+"""
 """
 
 @app.route("/lab/<lab_id>/meme")
