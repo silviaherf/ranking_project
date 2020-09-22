@@ -30,7 +30,7 @@ def createStudent(studentname):
 @app.route("/student/all")
 def allStudents():
 
-    cursor=db.students.find({"_id":{'$exists':True}},{'_id':0})
+    cursor=db.students.find({"_id":{'$exists':True}},{'_id':0, 'lab':0, 'pull_request':0})
 
     return json.dumps(list(cursor))
 
