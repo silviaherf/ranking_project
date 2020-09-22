@@ -8,6 +8,7 @@ import json
 
 
 
+
 def get_pull_requests(api_key=os.getenv('GH_APIKEY'),i=1):
     
     """
@@ -48,8 +49,7 @@ def get_url(url,api_key=os.getenv('GH_APIKEY')):
 
     res = requests.get(url, headers=headers)
     #res = requests.get(url, params=query_params, headers=headers)
-    print(f"Request data to {res.url} status_code:{res.status_code}")
-    
+        
     data = res.json()
     if res.status_code != 200:
         
@@ -153,5 +153,7 @@ def export_json(students):
     with open('students.json', 'w') as json_file:
         json.dump(students, json_file)
     return 'JSON file exported'
+
+
 
 

@@ -6,9 +6,32 @@ from flask import Flask
 from flask import request, Response
 #from src.helpers.json_response import asJsonResponse
 import re
-from database import db
+from src.database import db
 
 app = Flask("ranking")
+
+@app.route("/student/create/<studentname>")
+def createStudent(student):
+    studentname=student['name']
+    db.students.insert(student)
+    #res=requests.get(f'http://0.0.0.0:3000/student/create/{studentname}')
+    
+
+    projection = {"id": 1}
+    searchRE = re.compile(f"{studentname}", re.IGNORECASE)
+    foundStudent = db["github"].find_one(
+        {"name": searchRE}, projection)
+
+    if not foundStudent:
+        # Set status code to 404 NOT FOUND
+        return {
+            "status": "not found",
+            "message": f"No student found with name {foundStudent} in database"
+        }, 404
+
+  
+    return foundStudent
+        
 
 """
 
@@ -44,7 +67,7 @@ def searchStudent(studentname):
 
 """
 
-
+"""
 @app.route("/student/create/prueba")
 #@asJsonResponse
 def searchStudent():
@@ -54,6 +77,9 @@ def searchStudent():
         "message": 'esto es una prueba',
 
     }
+
+"""
+
 
 """
 @app.route("/student/all")
