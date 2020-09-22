@@ -176,7 +176,7 @@ def export_json(students):
     return 'JSON file exported'
 
 
-def student_toMongo(studentname):
-    return db.students.insert_one(studentname)
+def student_toMongo(student):
+    return db.students.insert_one(student)
     
 

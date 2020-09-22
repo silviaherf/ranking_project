@@ -20,7 +20,7 @@ def main():
    for student in students_toMongo:
        studentname=student['name']
        #gen.createStudent(name)
-       export.student_toMongo(studentname)
+       #export.student_toMongo(studentname)
 
 
 if __name__=="__main__":

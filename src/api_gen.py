@@ -14,46 +14,20 @@ app = Flask("ranking")
 
 @app.route("/student/create/<studentname>")
 def createStudent(studentname):
-    if db.github.find(f'"name":{studentname}'):
-        return 'This student is already on MongoDB'
-    else:
-        stu=export.student_toMongo(studentname)
-        return {"_id": stu.inserted_id}
-        
-
-"""
-
-@app.route("/student/create/<studentname>")
-#@asJsonResponse
-def searchStudent(studentname):
-    
-    if not studentname:
+   if not studentname:
         # Set status code to 400 BAD REQUEST
         return {
             "status": "error",
             "message": "Any student in query , please specify one"
         }, 400
 
-    # Search a company in mongodb database
-    projection = {"name": 1, "category_code": 1,"description":1}
-    searchRE = re.compile(f"{companyNameQuery}", re.IGNORECASE)
-    foundStudent = db["crunchbase"].find_one(
-        {"name": searchRE}, projection)
+    if db.github.find(f'"name":{studentname}'):
+        return 'This student is already on MongoDB'
+    else:
+        stu=export.student_toMongo(student)
+        return {"_id": stu.inserted_id}
+        
 
-    if not foundStudent:
-        # Set status code to 404 NOT FOUND
-        return {
-            "status": "not found",
-            "message": f"No student found with name {foundStudent} in database"
-        }, 404
-
-    return {
-        "status": "OK",
-        "searchQuery": studentname,
-        "student": foundStudent
-    }
-
-"""
 
 """
 @app.route("/student/create/prueba")
