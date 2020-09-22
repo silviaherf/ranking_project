@@ -60,6 +60,14 @@ def get_pages_students(i=1):
 #Pendiente sacar los valores correctos de meme y times. Y buscar nombre en comentarios
 def get_student(data,i=0): 
     lab=re.search(r'[lab-].*\]',data[i]['title']).group().split(']')[0]
+
+    mentions={}
+    mention_encuentra=re.findall(r'\@\w+',data[9]['body'])
+    for n,mention in enumerate(mention_encuentra):
+        mentions.update({f'mentioned{n+1}':mention})
+    
+
+
     if data[i]['assignees'][0]['login']:
         instructor=data[i]['assignees'][0]['login']
 
@@ -77,7 +85,7 @@ def get_student(data,i=0):
 
     
 
-    return {
+    return ({
         'name':data[i]['user']['login'],
         'join':'buscar @',
         'comentario':'buscar nombre',
@@ -89,5 +97,5 @@ def get_student(data,i=0):
         'pull_request_closed_time': pull_request_close_time,
         'pull_request_created_day': pull_request_created_day,
         'pull_request_created_time': pull_request_created_time,
-    }.update(memes)
+    }.update(memes)).update(mentions)
 
