@@ -2,14 +2,12 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 import requests
-#from flask import request, Response
-#from src.helpers.json_response import asJsonResponse
 import re
 from bs4 import BeautifulSoup
 
 
 
-def get_url(i=1,api_key=os.getenv('GH_APIKEY')):
+def get_url(api_key=os.getenv('GH_APIKEY'),i=1):
     
     """
     This function gets information out of an API for the year previously entered as a terminal argument.
@@ -27,6 +25,7 @@ def get_url(i=1,api_key=os.getenv('GH_APIKEY')):
     #res = requests.get(url, params=query_params, headers=headers)
     print(f"Request data to {res.url} status_code:{res.status_code}")
     
+    data = res.json()
     if res.status_code != 200:
         
         raise ValueError(f'Invalid Github API call: {data["message"]}\nSee more in {data["documentation_url"]}')
@@ -57,7 +56,7 @@ def get_pages_students(i=1):
 
 
 
-#Pendiente sacar los valores correctos de meme y times. Y buscar nombre en comentarios
+
 def get_student(data,i=0): 
     """
     This function takes out the information needed in MongoDB. 
@@ -66,50 +65,59 @@ def get_student(data,i=0):
     """
 
     lab=re.search(r'[lab-].*\]',data[i]['title']).group().split(']')[0]
+           
+    if data[i]['state']=='closed':
+        pull_request_closed_day=re.search(r'\d{4}\-\d{2}\-\d{2}',data[i]['closed_at']).group()
+        pull_request_closed_time=re.search(r'\d{2}\:\d{2}\:\d{2}',data[i]['closed_at']).group()
+    else:
+        pull_request_closed_day=''
+        pull_request_closed_time=''
+
+
+    pull_request_created_day=re.search(r'\d{4}\-\d{2}\-\d{2}',data[i]['created_at']).group()
+    pull_request_created_time=re.search(r'\d{2}\:\d{2}\:\d{2}',data[i]['created_at']).group()
+    
+    if data[i]['assignees']:
+        instructor=data[i]['assignees'][0]['login']
+    else:
+        instructor=''
+    
+    dic={
+        'name':data[i]['user']['login'],
+        'lab': lab,
+        'pull_request':data[i]['id'],
+        'pull_request_status':data[i]['state'],
+        'instructor': instructor ,
+        'pull_request_closed_day': pull_request_closed_day,
+        'pull_request_closed_time': pull_request_closed_time,
+        'pull_request_created_day': pull_request_created_day,
+        'pull_request_created_time': pull_request_created_time,
+    }
+
+    if data[i]['state']=='closed':    
+        comment=requests.get(data[i]['comments_url']).json()
+        memes={}
+        
+        for n,encuentra in enumerate(re.findall(r'http.*\)',comment[0]['body'])):
+            meme=encuentra.split(')')
+            memes.update({f'meme{n+1}':meme[0]})
+        dic.update(memes)
+    
 
     if data[i]['body']:
         mentions={}
         mention_encuentra=re.findall(r'\@\w+',data[i]['body'])
         for n,mention in enumerate(mention_encuentra):
             mentions.update({f'mentioned{n+1}':mention})
+        dic.update(mentions)
     
     if type(requests.get(data[i]['issue_url']).json())==list:
         joins={}
         for n,join in enumerate(requests.get(data[i]['issue_url']).json()):
             if re.search(r'join',join['body']):
                 joins.update({f'join{n+1}':join['user']['login']})
-    """
-    if data[i]['assignees'][0]['login']:
-        instructor=data[i]['assignees'][0]['login']
-        """
-
-
-
-    comment=requests.get(data[i]['comments_url']).json()
-    memes={}
-    for n,encuentra in enumerate(re.findall(r'http.*\)',comment[i]['body'])):
-        meme=encuentra.split(')')
-        memes.update({f'meme{n+1}':meme[0]})
-
-       
-    pull_request_closed_day=re.search(r'\d{4}\-\d{2}\-\d{2}',data[i]['closed_at']).group()
-    pull_request_closed_time=re.search(r'\d{2}\:\d{2}\:\d{2}',data[i]['closed_at']).group()
-    pull_request_created_day=re.search(r'\d{4}\-\d{2}\-\d{2}',data[i]['created_at']).group()
-    pull_request_created_time=re.search(r'\d{2}\:\d{2}\:\d{2}',data[i]['created_at']).group()
-
+            dic.update(joins)
     
 
-    return (({
-        'name':data[i]['user']['login'],
-        'join':'buscar @',
-        'comentario':'buscar nombre',
-        'lab': lab,
-        'pull_request':data[i]['id'],
-        'pull_request_status':data[i]['state'],
-        'instructor': instructor ,
-        'pull_request_closed_day': pull_request_close_day,
-        'pull_request_closed_time': pull_request_close_time,
-        'pull_request_created_day': pull_request_created_day,
-        'pull_request_created_time': pull_request_created_time,
-    }.update(memes)).update(mentions)).update(joins)
+    return dic
 
