@@ -45,11 +45,11 @@ def searchLab(lab_prefix):
             "message": "Any lab-prefix in query , please specify one"
         }, 400
 
-    if db.labs.find_one({"lab": lab_prefix}):
+    if db.labs.find_one({"lab_prefix": lab_prefix}):
         return 'This lab is already on MongoDB'
     else:
-        lab=export.lab_toMongo(lab)
-        return {"_id": lab.inserted_id}
+        labs=export.lab_toMongo(lab)
+        return {"_id": labs.inserted_id}
 """
 
 (GET) /lab/<lab_id>/search
