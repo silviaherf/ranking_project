@@ -62,23 +62,21 @@ def get_student(data,i=0):
     lab=re.search(r'[lab-].*\]',data[i]['title']).group().split(']')[0]
     if data[i]['assignees'][0]['login']:
         instructor=data[i]['assignees'][0]['login']
-    """
 
-    Pendiente sacar meme
     comment=requests.get(data[i]['comments_url']).json()
-    soup = BeautifulSoup(requests.get(comment[i]['html_url']).text, 'html.parser')
-    meme=soup.select('div.edit-comment-hide a img')
+    memes={}
+    for n,encuentra in enumerate(re.findall(r'http.*\)',comment[0]['body'])):
+        meme=encuentra.split(')')
+        memes.update({f'meme{n+1}':meme[0]})}
 
-    """
-
-    """
-    Pendiente mirar cómo sacar info:
-    pull_request_close_day=re.search(r'\d{4}\-\d{2}\-\d{2}',data[i]['closed_at']).group()
-    pull_request_close_time=re.search(r'\d{2}\:\d{2}\:\d{2}',data[i]['closed_at']).group()
+       
+    pull_request_closed_day=re.search(r'\d{4}\-\d{2}\-\d{2}',data[i]['closed_at']).group()
+    pull_request_closed_time=re.search(r'\d{2}\:\d{2}\:\d{2}',data[i]['closed_at']).group()
     pull_request_created_day=re.search(r'\d{4}\-\d{2}\-\d{2}',data[i]['created_at']).group()
     pull_request_created_time=re.search(r'\d{2}\:\d{2}\:\d{2}',data[i]['created_at']).group()
 
-    """
+    
+
     return {
         'name':data[i]['user']['login'],
         'join':'buscar @',
@@ -87,9 +85,9 @@ def get_student(data,i=0):
         'pull_request':data[i]['id'],
         'pull_request_status':data[i]['state'],
         'instructor': instructor ,
-        'pull_request_close_time': data[i]['closed_at'],
-        'last_commit_time': data[i]['updated_at'],
-        'meme':data[i]['title']
-
-    }
+        'pull_request_closed_day': pull_request_close_day,
+        'pull_request_closed_time': pull_request_close_time,
+        'pull_request_created_day': pull_request_created_day,
+        'pull_request_created_time': pull_request_created_time,
+    }.update(memes)
 
