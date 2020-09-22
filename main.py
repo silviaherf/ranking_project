@@ -7,8 +7,9 @@ def main():
 
    # students=api.get_pages_students()
 
-
-    print(len(students))
+    export.get_student(students)
+    
+    
 
 
 if __name__=="__main__":

@@ -60,32 +60,36 @@ def get_pages_students(i=1):
 #Pendiente sacar los valores correctos de meme y times. Y buscar nombre en comentarios
 def get_student(data,i=0): 
     """
-    This function takes out the information needed in MongoDB
-
+    This function takes out the information needed in MongoDB. 
+    The parameter needed is data, the selected response as json format.
 
     """
+
     lab=re.search(r'[lab-].*\]',data[i]['title']).group().split(']')[0]
 
-    mentions={}
-    mention_encuentra=re.findall(r'\@\w+',data[9]['body'])
-    for n,mention in enumerate(mention_encuentra):
-        mentions.update({f'mentioned{n+1}':mention})
+    if data[i]['body']:
+        mentions={}
+        mention_encuentra=re.findall(r'\@\w+',data[i]['body'])
+        for n,mention in enumerate(mention_encuentra):
+            mentions.update({f'mentioned{n+1}':mention})
     
-    joins={}
-    for n,join in enumerate(requests.get(data[0]['issue_url']).json()):
-        if re.search(r'join',join['body']):
-            joins.update({f'join{n+1}':join['user']['login']})
-
-        if data[i]['assignees'][0]['login']:
-            instructor=data[i]['assignees'][0]['login']
+    if type(requests.get(data[i]['issue_url']).json())==list:
+        joins={}
+        for n,join in enumerate(requests.get(data[i]['issue_url']).json()):
+            if re.search(r'join',join['body']):
+                joins.update({f'join{n+1}':join['user']['login']})
+    """
+    if data[i]['assignees'][0]['login']:
+        instructor=data[i]['assignees'][0]['login']
+        """
 
 
 
     comment=requests.get(data[i]['comments_url']).json()
     memes={}
-    for n,encuentra in enumerate(re.findall(r'http.*\)',comment[0]['body'])):
+    for n,encuentra in enumerate(re.findall(r'http.*\)',comment[i]['body'])):
         meme=encuentra.split(')')
-        memes.update({f'meme{n+1}':meme[0]})}
+        memes.update({f'meme{n+1}':meme[0]})
 
        
     pull_request_closed_day=re.search(r'\d{4}\-\d{2}\-\d{2}',data[i]['closed_at']).group()
