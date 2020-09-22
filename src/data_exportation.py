@@ -4,13 +4,14 @@ load_dotenv()
 import requests
 import re
 from bs4 import BeautifulSoup
+import json
 
 
 
-def get_url(api_key=os.getenv('GH_APIKEY'),i=1):
+def get_pull_requests(api_key=os.getenv('GH_APIKEY'),i=1):
     
     """
-    This function gets information out of an API for the year previously entered as a terminal argument.
+    This function gets information of all pull requests in datamad0820 repo. In case it is specified, the number of the resulting page can be changed
     """
     baseUrl="https://api.github.com"
     endpoint=f'/repos/ironhack-datalabs/datamad0820/pulls?state=all&page={i}'
@@ -35,6 +36,29 @@ def get_url(api_key=os.getenv('GH_APIKEY'),i=1):
         
         return res
 
+def get_url(url,api_key=os.getenv('GH_APIKEY')):
+    
+    """
+    This function makes a request to a URL and returns its response.
+    """
+    
+    headers = {
+        "Authorization": f"Bearer {api_key}"
+    }
+
+    res = requests.get(url, headers=headers)
+    #res = requests.get(url, params=query_params, headers=headers)
+    print(f"Request data to {res.url} status_code:{res.status_code}")
+    
+    data = res.json()
+    if res.status_code != 200:
+        
+        raise ValueError(f'Invalid Github API call: {data["message"]}\nSee more in {data["documentation_url"]}')
+        
+    else:
+        print(f"Requested data to {url}; status_code:{res.status_code}")
+        
+        return res
 
 
 def get_pages_students(i=1):
@@ -95,13 +119,17 @@ def get_student(data,i=0):
     }
 
     if data[i]['state']=='closed':    
-        comment=requests.get(data[i]['comments_url']).json()
+        comment=get_url(data[i]['comments_url']).json()
         memes={}
-        
-        for n,encuentra in enumerate(re.findall(r'http.*\)',comment[0]['body'])):
-            meme=encuentra.split(')')
-            memes.update({f'meme{n+1}':meme[0]})
+        if len(comment)>0:
+            for n,encuentra in enumerate(re.findall(r'http.*\)',comment[0]['body'])):
+                meme=encuentra.split(')')
+                memes.update({f'meme{n+1}':meme[0]})
+            
+        else:
+            memes.update({f'meme':''})
         dic.update(memes)
+
     
 
     if data[i]['body']:
@@ -120,4 +148,10 @@ def get_student(data,i=0):
     
 
     return dic
+
+def export_json(students):
+    with open('students.json', 'w') as json_file:
+        json.dump(students, json_file)
+    return 'JSON file exported'
+
 
