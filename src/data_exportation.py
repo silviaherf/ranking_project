@@ -5,6 +5,7 @@ import requests
 import re
 from bs4 import BeautifulSoup
 import json
+from src.database import db
 
 
 
@@ -89,6 +90,43 @@ def get_student(data,i=0):
     """
 
     lab=re.search(r'[lab-].*\]',data[i]['title']).group().split(']')[0]
+
+    dic={
+        'name':data[i]['user']['login'],
+        'lab': lab,
+        'pull_request':data[i]['id'],
+   
+    }
+
+
+
+    if data[i]['body']:
+        mentions={}
+        mention_encuentra=re.findall(r'\@\w+',data[i]['body'])
+        for n,mention in enumerate(mention_encuentra):
+            mentions.update({f'mentioned{n+1}':mention})
+        dic.update(mentions)
+    
+    if type(requests.get(data[i]['issue_url']).json())==list:
+        joins={}
+        for n,join in enumerate(requests.get(data[i]['issue_url']).json()):
+            if re.search(r'join',join['body']):
+                joins.update({f'join{n+1}':join['user']['login']})
+            dic.update(joins)
+
+    return dic
+
+
+
+
+def get_lab(data,i=0): 
+    """
+    This function takes out the information needed in MongoDB. 
+    The parameter needed is data, the selected response as json format.
+
+    """
+
+    lab=re.search(r'[lab-].*\]',data[i]['title']).group().split(']')[0]
            
     if data[i]['state']=='closed':
         pull_request_closed_day=re.search(r'\d{4}\-\d{2}\-\d{2}',data[i]['closed_at']).group()
@@ -107,7 +145,7 @@ def get_student(data,i=0):
         instructor=''
     
     dic={
-        'name':data[i]['user']['login'],
+
         'lab': lab,
         'pull_request':data[i]['id'],
         'pull_request_status':data[i]['state'],
@@ -130,23 +168,6 @@ def get_student(data,i=0):
             memes.update({f'meme':''})
         dic.update(memes)
 
-    
-
-    if data[i]['body']:
-        mentions={}
-        mention_encuentra=re.findall(r'\@\w+',data[i]['body'])
-        for n,mention in enumerate(mention_encuentra):
-            mentions.update({f'mentioned{n+1}':mention})
-        dic.update(mentions)
-    
-    if type(requests.get(data[i]['issue_url']).json())==list:
-        joins={}
-        for n,join in enumerate(requests.get(data[i]['issue_url']).json()):
-            if re.search(r'join',join['body']):
-                joins.update({f'join{n+1}':join['user']['login']})
-            dic.update(joins)
-    
-
     return dic
 
 def export_json(students):
@@ -155,5 +176,7 @@ def export_json(students):
     return 'JSON file exported'
 
 
-
+def student_toMongo(studentname):
+    return db.students.insert_one(studentname)
+    
 
