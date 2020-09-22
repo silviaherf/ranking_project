@@ -59,6 +59,11 @@ def get_pages_students(i=1):
 
 #Pendiente sacar los valores correctos de meme y times. Y buscar nombre en comentarios
 def get_student(data,i=0): 
+    """
+    This function takes out the information needed in MongoDB
+
+
+    """
     lab=re.search(r'[lab-].*\]',data[i]['title']).group().split(']')[0]
 
     mentions={}
@@ -66,10 +71,15 @@ def get_student(data,i=0):
     for n,mention in enumerate(mention_encuentra):
         mentions.update({f'mentioned{n+1}':mention})
     
+    joins={}
+    for n,join in enumerate(requests.get(data[0]['issue_url']).json()):
+        if re.search(r'join',join['body']):
+            joins.update({f'join{n+1}':join['user']['login']})
+
+        if data[i]['assignees'][0]['login']:
+            instructor=data[i]['assignees'][0]['login']
 
 
-    if data[i]['assignees'][0]['login']:
-        instructor=data[i]['assignees'][0]['login']
 
     comment=requests.get(data[i]['comments_url']).json()
     memes={}
@@ -85,7 +95,7 @@ def get_student(data,i=0):
 
     
 
-    return ({
+    return (({
         'name':data[i]['user']['login'],
         'join':'buscar @',
         'comentario':'buscar nombre',
@@ -97,5 +107,5 @@ def get_student(data,i=0):
         'pull_request_closed_time': pull_request_close_time,
         'pull_request_created_day': pull_request_created_day,
         'pull_request_created_time': pull_request_created_time,
-    }.update(memes)).update(mentions)
+    }.update(memes)).update(mentions)).update(joins)
 
