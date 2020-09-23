@@ -59,16 +59,16 @@ def searchLab(lab_prefix):
             "message": "Any lab-prefix in query , please specify one"
         }, 400
 
-    if db.labs.find_one({"lab_prefix": lab_prefix}):
+    if db.labs.find_one({"lab": lab_prefix}):
         return 'This lab is already on MongoDB'
     else:
-        labs=export.lab_toMongo(lab)
-        return dumps({"_id": labs.inserted_id})
+        lab_add=export.lab_toMongo(lab)
+        return dumps({"_id": lab_add.inserted_id})
 
 
 
-@app.route("/lab/<lab_id>/search")
-def searchLab_Student(lab_id):
+@app.route("/lab/<lab_prefix>/search")
+def searchLab_Student(lab_prefix):
     """
     Purpose: Search student submissions on specific lab
     Params: user_id
@@ -84,14 +84,10 @@ def searchLab_Student(lab_id):
     
     projection = {"name": 1}
 
-    result=db.students.find({'$and':[ {"name": "silviaherf"}, {"lab":lab_id}]},projection)
+    result=db.students.find({'$and':[ {"name": user_id}, {"lab":lab_prefix}]})
 
   
-    return dumps({
-        "status": "OK",
-        "searchQuery": lab_id,
-        "student": result
-    })
+    return dumps(result)
 
 """
 
