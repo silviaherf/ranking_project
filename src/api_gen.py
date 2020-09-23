@@ -36,7 +36,6 @@ def allStudents():
 
 
 
-
 @app.route("/lab/create/<lab_prefix>")
 def searchLab(lab_prefix):
     if not lab_prefix:

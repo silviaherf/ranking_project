@@ -64,10 +64,10 @@ def get_url(url,api_key=os.getenv('GH_APIKEY')):
 
 def get_pages_students(i=1):
     """
-        This function takes out every page of pull requests from the previuos get_url query
+        This function takes out every page of pull requests from the previuos get_url query and returns stundets JSON objects
     """
     students=[]
-    n_pages=int(re.search(r'\d{2}',re.search(r'\d{2}\>\;\srel="last"',get_url(i=1).headers['link']).group()).group())
+    n_pages=int(re.search(r'\d{2}',re.search(r'\d{2}\>\;\srel="last"',get_pull_requests(i=1).headers['link']).group()).group())
     for page in range(i,n_pages):
         try:
             print(f'Loading page {page}')
@@ -79,8 +79,21 @@ def get_pages_students(i=1):
     return students
 
 
-
-
+def get_pages_labs(i=1):
+    """
+        This function takes out every page of pull requests from the previuos get_url query and returns labs JSON objects
+    """
+    labs=[]
+    n_pages=int(re.search(r'\d{2}',re.search(r'\d{2}\>\;\srel="last"',get_pull_requests(i=1).headers['link']).group()).group())
+    for page in range(i,n_pages):
+        try:
+            print(f'Loading page {page}')
+            data=get_url(i=page).json()
+            students.append([get_lab(data,i=j) for j in range(0,len(data))])
+            
+        except ValueError:
+            raise ValueError
+    return labs
 
 def get_student(data,i=0): 
     """
@@ -172,9 +185,9 @@ def get_lab(data,i=0):
 
     return dic
 
-def export_json(students):
-    with open('students.json', 'w') as json_file:
-        json.dump(students, json_file)
+def export_json(data):
+    with open(f'{data}.json', 'w') as json_file:
+        json.dump(data, json_file)
     return 'JSON file exported'
 
 
