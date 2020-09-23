@@ -40,9 +40,11 @@ def allStudents():
 
 
 #Pendiente cambiar lab-prefix por prefix
+@app.route("/lab/create")
 @app.route("/lab/create/<lab_prefix>")
 def searchLab(lab_prefix):
-    student={"name": studentname,**params}
+    params=dict(request.args)
+    lab={"name": lab_prefix,**params}
     if not lab_prefix:
         return {
             "status": "error",
@@ -53,7 +55,7 @@ def searchLab(lab_prefix):
         return 'This lab is already on MongoDB'
     else:
         labs=export.lab_toMongo(lab)
-        return {"_id": labs.inserted_id}
+        return dumps({"_id": labs.inserted_id})
 """
 
 (GET) /lab/<lab_id>/search
