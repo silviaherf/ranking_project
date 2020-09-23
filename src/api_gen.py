@@ -8,31 +8,36 @@ import re
 from src.database import db
 import src.data_exportation as export
 import json
+from bson.json_util import dumps
 
 app = Flask("ranking")
 
-
+@app.route("/student/create")
 @app.route("/student/create/<studentname>")
-def createStudent(studentname):
+def createStudent(studentname=None):
+    params=dict(request.args)
+    student={"name": studentname,**params}
     if not studentname:
         return {
             "status": "error",
             "message": "Any student in query , please specify one"
         }, 400
     if db.students.find_one({"name": studentname}):
+        db.students.update_one({"name": studentname},{"$set":student})
         return 'This student is already on MongoDB'
     else:
+        print(student)
         stu=export.student_toMongo(student)
-        return {"_id": stu.inserted_id}
+        return dumps({"_id": stu.inserted_id})
         
 
 
 @app.route("/student/all")
 def allStudents():
 
-    cursor=db.students.find({"_id":{'$exists':True}},{'_id':0, 'lab':0, 'pull_request':0})
+    cursor=db.students.find({"_id":{'$exists':True}},{'lab':0, 'pull_request':0})
 
-    return json.dumps(list(cursor))
+    return dumps(list(cursor))
 
 
 
