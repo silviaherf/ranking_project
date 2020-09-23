@@ -18,15 +18,6 @@ def main():
    export.export_json(labs,'labs')
 
 
-
-
-   """
-   for student in students_toMongo:
-       studentname=student['name']
-       #gen.createStudent(name)
-       #export.student_toMongo(studentname)
-    """
-
 if __name__=="__main__":
     main()
     

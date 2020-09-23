@@ -1,5 +1,5 @@
 [
-    [
+    
         {
             "lab": "lab-code-simplicity-efficiency",
             "lab_prefix": "lab-code",
@@ -348,7 +348,7 @@
             "pull_request_created_time": "18:49:02",
             "meme1": "https://user-images.githubusercontent.com/57899051/93996013-01794a00-fd92-11ea-991f-a84941b9f87f.jpg"
         }
-    ],
+    ,
     [
         {
             "lab": "lab-code-simplicity-efficiency",
@@ -713,7 +713,7 @@
             "pull_request_created_time": "15:41:20",
             "meme1": "https://user-images.githubusercontent.com/57899051/93534770-ffecf380-f945-11ea-9510-1051156448d2.jpg"
         }
-    ],
+    ,
     [
         {
             "lab": "lab-advance-querying-mongo",
@@ -1084,7 +1084,7 @@
             "pull_request_created_time": "18:24:59",
             "meme1": "https://user-images.githubusercontent.com/57899051/93532431-4db32d00-f941-11ea-9300-e9e393cd174e.jpg"
         }
-    ],
+    ,
     [
         {
             "lab": "lab-advanced-pandas",
@@ -1451,7 +1451,7 @@
             "pull_request_created_time": "22:22:52",
             "meme1": "https://user-images.githubusercontent.com/57899051/93230014-82738880-f777-11ea-8a27-fb89b6b990cb.jpg"
         }
-    ],
+    ,
     [
         {
             "lab": "lab-web-scraping",
@@ -1815,7 +1815,7 @@
             "pull_request_created_time": "07:07:31",
             "meme1": "https://user-images.githubusercontent.com/52798316/92451639-4cedfe80-f1bd-11ea-8479-862cc5e2fc9d.png"
         }
-    ],
+    ,
     [
         {
             "lab": "lling-project",
@@ -2181,7 +2181,7 @@
             "pull_request_created_time": "20:54:01",
             "meme1": "https://user-images.githubusercontent.com/52798316/92451639-4cedfe80-f1bd-11ea-8479-862cc5e2fc9d.png"
         }
-    ],
+    ,
     [
         {
             "lab": "lab-hypothesis-testing",
@@ -2550,7 +2550,7 @@
             "pull_request_created_time": "19:37:04",
             "meme1": "https://user-images.githubusercontent.com/52798316/92398590-25e5ed00-f129-11ea-9420-a6058a06ca21.png"
         }
-    ],
+    ,
     [
         {
             "lab": "lab-plotting-multiple-data-series",
@@ -2918,7 +2918,7 @@
             "pull_request_created_time": "19:15:49",
             "meme1": "https://user-images.githubusercontent.com/52798316/92257945-5550eb80-eed6-11ea-9658-cfb47ab410cd.png"
         }
-    ],
+    ,
     [
         {
             "lab": "lab-bash",
@@ -3283,7 +3283,7 @@
             "pull_request_created_time": "16:49:59",
             "meme1": "https://user-images.githubusercontent.com/57899051/92385912-10fe5f00-f113-11ea-93c8-d6a420ea4200.jpeg"
         }
-    ],
+    ,
     [
         {
             "lab": "andas-project",
@@ -3650,7 +3650,7 @@
             "meme1": "https://github.com/ironhack-datalabs/datamad0820/blob/be4c7a4bcf30544326f2328497b9660b7a2a5940/module-1/lab-map-reduce-filter/your-code/main.ipynb",
             "meme2": "https://user-images.githubusercontent.com/57899051/91883874-60f9a380-ec85-11ea-9cb4-39c064cb669c.png"
         }
-    ],
+    ,
     [
         {
             "lab": "lab-lambda-functions",
@@ -4015,7 +4015,7 @@
             "pull_request_created_time": "18:15:44",
             "meme1": "https://user-images.githubusercontent.com/52798316/91431082-25fc0800-e860-11ea-95a8-0d0156303d1c.png"
         }
-    ],
+    ,
     [
         {
             "lab": "lab-mysql-select",
@@ -4381,7 +4381,7 @@
             "pull_request_created_time": "17:13:31",
             "meme1": "https://user-images.githubusercontent.com/57899051/91279433-c3ced480-e785-11ea-90f8-45f77663edfe.jpg"
         }
-    ],
+    ,
     [
         {
             "lab": "lab-numpy",
@@ -4742,7 +4742,7 @@
             "pull_request_created_time": "22:17:09",
             "meme1": "https://user-images.githubusercontent.com/57899051/91070032-798b0d80-e636-11ea-8275-2aca5a913ac9.png"
         }
-    ],
+    ,
     [
         {
             "lab": "lab-data-vikings",
@@ -5108,7 +5108,7 @@
             "pull_request_created_day": "2020-08-20",
             "pull_request_created_time": "22:27:45"
         }
-    ],
+    ,
     [
         {
             "lab": "lab-errhand-listcompo",
@@ -5467,7 +5467,7 @@
             "pull_request_created_time": "18:26:56",
             "meme1": "https://user-images.githubusercontent.com/57899051/90785735-fa7a9a00-e302-11ea-945b-a687bad2e32b.jpg"
         }
-    ],
+    ,
     [
         {
             "lab": "lab-generators-functions",
@@ -5826,7 +5826,7 @@
             "pull_request_created_time": "18:41:21",
             "meme1": "https://user-images.githubusercontent.com/57899051/90630216-ea8a8980-e220-11ea-8e7a-fb5b054ae685.jpeg"
         }
-    ],
+    ,
     [
         {
             "lab": "lab-tuple-set-dict",
@@ -6178,5 +6178,4 @@
             "pull_request_created_time": "15:05:27",
             "meme1": "https://user-images.githubusercontent.com/57899051/90496162-c8700900-e145-11ea-804e-30e121ee9b95.jpeg"
         }
-    ]
-]
+]   

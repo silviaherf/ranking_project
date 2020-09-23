@@ -1,5 +1,5 @@
 [
-    [
+    
         {
             "name": "Diegon8",
             "lab": "lab-code-simplicity-efficiency",
@@ -151,8 +151,8 @@
             "lab": "lab-code-simplicity-efficiency",
             "pull_request": 488180414
         }
-    ],
-    [
+    ,
+    
         {
             "name": "DiegoCaulonga",
             "lab": "lab-code-simplicity-efficiency",
@@ -303,8 +303,8 @@
             "lab": "lab-advance-querying-mongo",
             "pull_request": 487387659
         }
-    ],
-    [
+    ,
+    
         {
             "name": "bmedm",
             "lab": "lab-advance-querying-mongo",
@@ -455,8 +455,8 @@
             "lab": "lab-advanced-pandas",
             "pull_request": 484186602
         }
-    ],
-    [
+    ,
+    
         {
             "name": "KevsDe",
             "lab": "lab-advanced-pandas",
@@ -607,8 +607,8 @@
             "lab": "lab-web-scraping",
             "pull_request": 483172164
         }
-    ],
-    [
+    ,
+    
         {
             "name": "marta-zavala",
             "lab": "lab-web-scraping",
@@ -766,8 +766,8 @@
             "lab": "lab-hypothesis-testing",
             "pull_request": 481830827
         }
-    ],
-    [
+    ,
+    
         {
             "name": "Diegon8",
             "lab": "lling-project",
@@ -918,8 +918,8 @@
             "lab": "lab-hypothesis-testing",
             "pull_request": 480091113
         }
-    ],
-    [
+    ,
+    
         {
             "name": "charliesket",
             "lab": "lab-hypothesis-testing",
@@ -1070,8 +1070,8 @@
             "lab": "lab-plotting-multiple-data-series",
             "pull_request": 478868329
         }
-    ],
-    [
+    ,
+    
         {
             "name": "Davidlazarog",
             "lab": "lab-plotting-multiple-data-series",
@@ -1248,8 +1248,8 @@
             "lab": "lab-bash",
             "pull_request": 477279789
         }
-    ],
-    [
+    ,
+    
         {
             "name": "Jav1-Mart1nez",
             "lab": "lab-bash",
@@ -1400,8 +1400,8 @@
             "lab": "andas-project",
             "pull_request": 476412820
         }
-    ],
-    [
+    ,
+    
         {
             "name": "silviaherf",
             "lab": "andas-project",
@@ -1558,8 +1558,8 @@
             "pull_request": 474864500,
             "mentioned1": "@Jav1"
         }
-    ],
-    [
+    ,
+    
         {
             "name": "charliesket",
             "lab": "lab-lambda-functions",
@@ -1716,8 +1716,8 @@
             "lab": "lab-mysql-select",
             "pull_request": 474073177
         }
-    ],
-    [
+    ,
+    
         {
             "name": "Davidlazarog",
             "lab": "lab-mysql-select",
@@ -1869,8 +1869,8 @@
             "lab": "lab-numpy",
             "pull_request": 472653625
         }
-    ],
-    [
+    ,
+    
         {
             "name": "Diegon8",
             "lab": "lab-numpy",
@@ -2021,8 +2021,8 @@
             "lab": "lab-data-vikings",
             "pull_request": 472184962
         }
-    ],
-    [
+    ,
+    
         {
             "name": "FDELTA",
             "lab": "lab-data-vikings",
@@ -2174,8 +2174,8 @@
             "lab": "lab-errhand_listcomp",
             "pull_request": 471272743
         }
-    ],
-    [
+    ,
+    
         {
             "name": "Daniel-GarciaGarcia",
             "lab": "lab-errhand-listcompo",
@@ -2326,8 +2326,8 @@
             "lab": "lab-generators-functions",
             "pull_request": 470337096
         }
-    ],
-    [
+    ,
+    
         {
             "name": "Jav1-Mart1nez",
             "lab": "lab-generators-functions",
@@ -2478,8 +2478,8 @@
             "lab": "lab-tuple-set-dict",
             "pull_request": 469671480
         }
-    ],
-    [
+    ,
+    
         {
             "name": "Jav1-Mart1nez",
             "lab": "lab-tuple-set-dict",
@@ -2631,5 +2631,5 @@
             "lab": "lab-resolving-git-conflicts",
             "pull_request": 468890783
         }
-    ]
+    
 ]
