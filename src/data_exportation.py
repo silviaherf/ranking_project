@@ -71,7 +71,7 @@ def get_pages_students(i=1):
     for page in range(i,n_pages):
         try:
             print(f'Loading page {page}')
-            data=get_url(i=page).json()
+            data=get_pull_requests(i=page).json()
             students.append([get_student(data,i=j) for j in range(0,len(data))])
             
         except ValueError:
@@ -88,8 +88,8 @@ def get_pages_labs(i=1):
     for page in range(i,n_pages):
         try:
             print(f'Loading page {page}')
-            data=get_url(i=page).json()
-            students.append([get_lab(data,i=j) for j in range(0,len(data))])
+            data=get_pull_requests(i=page).json()
+            labs.append([get_lab(data,i=j) for j in range(0,len(data))])
             
         except ValueError:
             raise ValueError
@@ -101,8 +101,15 @@ def get_student(data,i=0):
     The parameter needed is data, the selected response as json format.
 
     """
+    if re.search(r'[lab-].*\]',data[i]['title'])!=None:
+        lab=re.search(r'[lab-].*\]',data[i]['title']).group().split(']')[0]
+    else:
+        lab=''
 
-    lab=re.search(r'[lab-].*\]',data[i]['title']).group().split(']')[0]
+    if re.search(r'lab-\w+',lab)!=None:
+        lab_prefix=re.search(r'lab-\w+',lab).group()
+    else:
+        lab_prefix=''
 
     dic={
         'name':data[i]['user']['login'],
@@ -138,9 +145,16 @@ def get_lab(data,i=0):
     The parameter needed is data, the selected response as json format.
 
     """
+    if re.search(r'[lab-].*\]',data[i]['title'])!=None:
+        lab=re.search(r'[lab-].*\]',data[i]['title']).group().split(']')[0]
+    else:
+        lab=''
 
-    lab=re.search(r'[lab-].*\]',data[i]['title']).group().split(']')[0]
-    lab_prefix=re.search(r'lab-\w+',lab).group()
+    if re.search(r'lab-\w+',lab)!=None:
+        lab_prefix=re.search(r'lab-\w+',lab).group()
+    else:
+        lab_prefix=''
+
            
     if data[i]['state']=='closed':
         pull_request_closed_day=re.search(r'\d{4}\-\d{2}\-\d{2}',data[i]['closed_at']).group()
@@ -185,8 +199,9 @@ def get_lab(data,i=0):
 
     return dic
 
-def export_json(data):
-    with open(f'{data}.json', 'w') as json_file:
+def export_json(data,name):
+    filename=f'{name}.json'
+    with open(filename, 'w') as json_file:
         json.dump(data, json_file)
     return 'JSON file exported'
 
