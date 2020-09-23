@@ -50,7 +50,7 @@ def allStudents():
 #Pendiente cambiar lab-prefix por lab
 @app.route("/lab/create")
 @app.route("/lab/create/<lab_prefix>")
-def searchLab(lab_prefix):
+def createLab(lab_prefix):
     params=dict(request.args)
     lab={"name": lab_prefix,**params}
     if not lab_prefix:
@@ -66,12 +66,33 @@ def searchLab(lab_prefix):
         return dumps({"_id": lab_add.inserted_id})
 
 
-
+"""
 @app.route("/lab/<lab_prefix>/search")
 def searchLab_Student(lab_prefix):
     """
+"""
     Purpose: Search student submissions on specific lab
     Params: user_id
+    Returns: If PR is open or closed
+
+    """
+"""
+    user_id = request.args.get("user_id","silviaherf")
+    
+    projection = {"name": 1}
+
+    pr=(db.students.find_one({'$and':[ {"name": user_id}, {"lab":lab_prefix}]},{"_id":0,"pull_request":1}))
+    result=db.labs.find( {"pull_request": pr['pull_request']},{"_id":0,"pull_request_status":1})
+
+  
+    return dumps(result)
+"""
+
+@app.route("/lab/<lab_prefix>/search")
+def searchLab(lab_prefix):
+    """
+    Purpose: Search student submissions on specific lab
+    Params: lab_prefix
     Returns: Number of open PR
             Number of closed PR
             Percentage of completeness (closed vs open)
@@ -80,14 +101,16 @@ def searchLab_Student(lab_prefix):
             Instructor grade time in hours: (pr_close_time-last_commit_time)
 
 """
-    user_id = request.args.get("user_id","silviaherf")
+        
+    projection = {"_id":0,"lab": 1}
+
+    result=db.students.find_one({"lab":lab_prefix},projection)
     
-    projection = {"name": 1}
-
-    result=db.students.find({'$and':[ {"name": user_id}, {"lab":lab_prefix}]})
-
   
     return dumps(result)
+
+
+
 
 """
 
