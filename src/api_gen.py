@@ -159,12 +159,7 @@ def randomMeme(lab_id):
     projection = {"_id":0,"meme": 1, "meme1":1, "meme2":1}
     result=db.labs.aggregate([  
         { "$sample": {"size": 1} }, 
-        { "$match":  {"lab": lab_id} }  ])
-
-
-   
-    #result=db.labs.find({"lab":lab_id},projection)
-    #memes=list(result)
-    #random.choice(memes)
+        { "$match":  {"lab": lab_id} }, {"$project":projection}])
+    
     return dumps(result)
 
