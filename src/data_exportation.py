@@ -200,7 +200,7 @@ def get_lab(data,i=0):
     return dic
 
 def export_json(data,name):
-    filename=f'{name}.json'
+    filename=f'src/{name}.json'
     with open(filename, 'w') as json_file:
         json.dump(data, json_file)
     return 'JSON file exported'
