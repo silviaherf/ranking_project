@@ -42,8 +42,7 @@ def allStudents():
     Purpose: List all students in database
     Returns: An array of student objects
     """
-
-    cursor=db.students.find({"_id":{'$exists':True}},{'_id':0,'lab':0, 'pull_request':0})
+    cursor=db.students.distinct("name") 
 
     return dumps(list(cursor))
 
