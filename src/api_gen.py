@@ -9,6 +9,7 @@ from src.database import db
 import src.data_exportation as export
 import json
 from bson.json_util import dumps
+import random
 
 app = Flask("ranking")
 
@@ -47,7 +48,7 @@ def allStudents():
     return dumps(list(cursor))
 
 
-#Pendiente cambiar lab-prefix por lab
+
 @app.route("/lab/create")
 @app.route("/lab/create/<lab_prefix>")
 def createLab(lab_prefix):
@@ -146,38 +147,19 @@ def searchLab(lab_prefix):
         "student": foundStudent
     }
 
-
+"""
+"""
+#Revisar!!
 @app.route("/lab/<lab_id>/meme")
-#@asJsonResponse
-def searchLab(lab_prefix):
+def randomMeme(lab_id):
     """
     #Purpose: Get a random meme (extracted from the ones used for each student pull request) for that lab.
 """
     
-    if not lab_prefix:
-        # Set status code to 400 BAD REQUEST
-        return {
-            "status": "error",
-            "message": "Any student in query , please specify one"
-        }, 400
-
-    # Search a company in mongodb database
-    projection = {"name": 1, "category_code": 1,"description":1}
-    searchRE = re.compile(f"{companyNameQuery}", re.IGNORECASE)
-    foundStudent = db["crunchbase"].find_one(
-        {"name": searchRE}, projection)
-
-    if not foundStudent:
-        # Set status code to 404 NOT FOUND
-        return {
-            "status": "not found",
-            "message": f"No student found with name {foundStudent} in database"
-        }, 404
-
-    return {
-        "status": "OK",
-        "searchQuery": lab-prefix,
-        "student": foundStudent
-    }
+    projection = {"_id":0,"meme": 1, "meme1":1, "meme2":1}
+    result=db.labs.find({"lab":lab_id},projection)
+    #memes=list(result)
+    #random.choice(memes)
+    return dumps(result)
 
 """
