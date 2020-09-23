@@ -15,6 +15,11 @@ app = Flask("ranking")
 @app.route("/student/create")
 @app.route("/student/create/<studentname>")
 def createStudent(studentname=None):
+    """
+    Purpose: Create a student and save into DB
+    Params: studentname the student name
+    Returns: student_id
+    """
     params=dict(request.args)
     student={"name": studentname,**params}
     if not studentname:
@@ -33,13 +38,17 @@ def createStudent(studentname=None):
 
 @app.route("/student/all")
 def allStudents():
+    """
+    Purpose: List all students in database
+    Returns: An array of student objects
+    """
 
     cursor=db.students.find({"_id":{'$exists':True}},{'_id':0,'lab':0, 'pull_request':0})
 
     return dumps(list(cursor))
 
 
-#Pendiente cambiar lab-prefix por prefix
+#Pendiente cambiar lab-prefix por lab
 @app.route("/lab/create")
 @app.route("/lab/create/<lab_prefix>")
 def searchLab(lab_prefix):
@@ -56,60 +65,44 @@ def searchLab(lab_prefix):
     else:
         labs=export.lab_toMongo(lab)
         return dumps({"_id": labs.inserted_id})
-"""
 
-(GET) /lab/<lab_id>/search
-Purpose: Search student submissions on specific lab
-Params: user_id
-Returns: See Lab analysis section
 
-"""
-"""
 
 @app.route("/lab/<lab_id>/search")
-#@asJsonResponse
-def searchLab(lab-prefix):
+def searchLab_Student(lab_id):
+    """
+    Purpose: Search student submissions on specific lab
+    Params: user_id
+    Returns: Number of open PR
+            Number of closed PR
+            Percentage of completeness (closed vs open)
+            List number of missing pr from students
+            The list of unique memes used for that lab
+            Instructor grade time in hours: (pr_close_time-last_commit_time)
+
+"""
+    user_id = request.args.get("user_id","silviaherf")
     
-    if not lab-prefix:
-        # Set status code to 400 BAD REQUEST
-        return {
-            "status": "error",
-            "message": "Any student in query , please specify one"
-        }, 400
+    projection = {"name": 1}
 
-    # Search a company in mongodb database
-    projection = {"name": 1, "category_code": 1,"description":1}
-    searchRE = re.compile(f"{companyNameQuery}", re.IGNORECASE)
-    foundStudent = db["crunchbase"].find_one(
-        {"name": searchRE}, projection)
+    result=db.students.find({'$and':[ {"name": "silviaherf"}, {"lab":lab_id}]},projection)
 
-    if not foundStudent:
-        # Set status code to 404 NOT FOUND
-        return {
-            "status": "not found",
-            "message": f"No student found with name {foundStudent} in database"
-        }, 404
-
-    return {
+  
+    return dumps({
         "status": "OK",
-        "searchQuery": lab-prefix,
-        "student": foundStudent
-    }
-
-"""
-"""
-
-(GET) /lab/memeranking
-Purpose: Ranking of the most used memes for datamad0820 divided by labs
-"""
+        "searchQuery": lab_id,
+        "student": result
+    })
 
 """
 
 @app.route("/lab/memeranking")
 #@asJsonResponse
-def searchLab(lab-prefix):
-    
-    if not lab-prefix:
+def searchLab(lab_prefix):
+    """
+    #Purpose: Ranking of the most used memes for datamad0820 divided by labs
+"""
+    if not lab_prefix:
         # Set status code to 400 BAD REQUEST
         return {
             "status": "error",
@@ -135,21 +128,15 @@ def searchLab(lab-prefix):
         "student": foundStudent
     }
 
-"""
-
-"""
-(GET) /lab/<lab_id>/meme
-Purpose: Get a random meme (extracted from the ones used for each student pull request) for that lab.
-
-
-"""
-"""
 
 @app.route("/lab/<lab_id>/meme")
 #@asJsonResponse
-def searchLab(lab-prefix):
+def searchLab(lab_prefix):
+    """
+    #Purpose: Get a random meme (extracted from the ones used for each student pull request) for that lab.
+"""
     
-    if not lab-prefix:
+    if not lab_prefix:
         # Set status code to 400 BAD REQUEST
         return {
             "status": "error",
@@ -176,4 +163,3 @@ def searchLab(lab-prefix):
     }
 
 """
-
