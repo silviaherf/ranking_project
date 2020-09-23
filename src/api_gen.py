@@ -103,55 +103,40 @@ def searchLab(lab_prefix):
 
 """
         
-    projection = {"_id":0,"pull_request_status": 1}
-
-    result=db.students.find({"lab":lab_prefix},projection)
+    #projection = {"_id":0,"pull_request_status": 1}
+    opened_pr=db.labs.find({"$and":[{"lab":lab_prefix},{"pull_request_status": "open"}]}).count()
+    closed_pr=db.labs.find({"$and":[{"lab":lab_prefix},{"pull_request_status": "closed"}]}).count()
     
+    result={'-El numero de PR abiertas es:': opened_pr,
+    '-El numero de PR cerradas es:': closed_pr
+    
+    }
   
     return dumps(result)
 
 
 
 
-"""
 
-@app.route("/lab/memeranking")
+
+@app.route("/memeranking")
 #@asJsonResponse
-def searchLab(lab_prefix):
+def memeRanking():
     """
     #Purpose: Ranking of the most used memes for datamad0820 divided by labs
 """
-    if not lab_prefix:
-        # Set status code to 400 BAD REQUEST
-        return {
-            "status": "error",
-            "message": "Any student in query , please specify one"
-        }, 400
+    #pendiente buscar memes y sustituir en match
+    projection = {"_id":0,"meme": 1, "meme1":1, "meme2":1}
+    result=db.labs.aggregate([   
+        { "$match":  {"meme": "meme"} }, { "$group": { "_id": "lab"}}, {"$project":projection}])
 
-    # Search a company in mongodb database
-    projection = {"name": 1, "category_code": 1,"description":1}
-    searchRE = re.compile(f"{companyNameQuery}", re.IGNORECASE)
-    foundStudent = db["crunchbase"].find_one(
-        {"name": searchRE}, projection)
-
-    if not foundStudent:
-        # Set status code to 404 NOT FOUND
-        return {
-            "status": "not found",
-            "message": f"No student found with name {foundStudent} in database"
-        }, 404
-
-    return {
-        "status": "OK",
-        "searchQuery": lab-prefix,
-        "student": foundStudent
-    }
-
-"""
+     
+    return dumps(result)
 
 
-@app.route("/lab/<lab_id>/meme")
-def randomMeme(lab_id):
+
+@app.route("/lab/<lab_prefix>/meme")
+def randomMeme(lab_prefix):
     """
     #Purpose: Get a random meme (extracted from the ones used for each student pull request) for that lab.
 """
@@ -159,7 +144,7 @@ def randomMeme(lab_id):
     projection = {"_id":0,"meme": 1, "meme1":1, "meme2":1}
     result=db.labs.aggregate([  
         { "$sample": {"size": 1} }, 
-        { "$match":  {"lab": lab_id} }, {"$project":projection}])
+        { "$match":  {"lab": lab_prefix} }, {"$project":projection}])
     
     return dumps(result)
 
