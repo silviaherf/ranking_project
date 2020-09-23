@@ -103,9 +103,9 @@ def searchLab(lab_prefix):
 
 """
         
-    projection = {"_id":0,"lab": 1}
+    projection = {"_id":0,"pull_request_status": 1}
 
-    result=db.students.find_one({"lab":lab_prefix},projection)
+    result=db.students.find({"lab":lab_prefix},projection)
     
   
     return dumps(result)
@@ -148,18 +148,23 @@ def searchLab(lab_prefix):
     }
 
 """
-"""
-#Revisar!!
+
+
 @app.route("/lab/<lab_id>/meme")
 def randomMeme(lab_id):
     """
     #Purpose: Get a random meme (extracted from the ones used for each student pull request) for that lab.
 """
-    
+
     projection = {"_id":0,"meme": 1, "meme1":1, "meme2":1}
-    result=db.labs.find({"lab":lab_id},projection)
+    result=db.labs.aggregate([  
+        { "$sample": {"size": 1} }, 
+        { "$match":  {"lab": lab_id} }  ])
+
+
+   
+    #result=db.labs.find({"lab":lab_id},projection)
     #memes=list(result)
     #random.choice(memes)
     return dumps(result)
 
-"""
