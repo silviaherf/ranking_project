@@ -26,7 +26,6 @@ def createStudent(studentname=None):
         db.students.update_one({"name": studentname},{"$set":student})
         return 'This student is already on MongoDB'
     else:
-        print(student)
         stu=export.student_toMongo(student)
         return dumps({"_id": stu.inserted_id})
         
@@ -35,14 +34,15 @@ def createStudent(studentname=None):
 @app.route("/student/all")
 def allStudents():
 
-    cursor=db.students.find({"_id":{'$exists':True}},{'lab':0, 'pull_request':0})
+    cursor=db.students.find({"_id":{'$exists':True}},{'_id':0,'lab':0, 'pull_request':0})
 
     return dumps(list(cursor))
 
 
-
+#Pendiente cambiar lab-prefix por prefix
 @app.route("/lab/create/<lab_prefix>")
 def searchLab(lab_prefix):
+    student={"name": studentname,**params}
     if not lab_prefix:
         return {
             "status": "error",
