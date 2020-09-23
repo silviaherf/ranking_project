@@ -103,12 +103,24 @@ def searchLab(lab_prefix):
 
 """
         
-    #projection = {"_id":0,"pull_request_status": 1}
+    projection = {"_id":0,"meme1": 1}
     opened_pr=db.labs.find({"$and":[{"lab":lab_prefix},{"pull_request_status": "open"}]}).count()
     closed_pr=db.labs.find({"$and":[{"lab":lab_prefix},{"pull_request_status": "closed"}]}).count()
+    percentage=round(closed_pr/(opened_pr+closed_pr)*100,2)
+
+    #pendiente comprobar para joins y comentarios
+    missing_pr=db.students.find({"$and":[{"lab":lab_prefix},{"pull_request": {"$exists":False}}]}).count()
+
+    memes=db.labs.aggregate([   
+        { "$match":  {"lab": lab_prefix} }, { "$group": {" _id": "meme1" } }])
+        
+
     
-    result={'-El numero de PR abiertas es:': opened_pr,
-    '-El numero de PR cerradas es:': closed_pr
+    result={'-The number of opened PR is': opened_pr,
+    '-The number of closed PR is': closed_pr,
+    'The percentage of complteness is': percentage,
+    'Number of PR': missing_pr,
+    'Distinct memes': memes
     
     }
   
@@ -126,9 +138,9 @@ def memeRanking():
     #Purpose: Ranking of the most used memes for datamad0820 divided by labs
 """
     #pendiente buscar memes y sustituir en match
-    projection = {"_id":0,"meme": 1, "meme1":1, "meme2":1}
+    projection = {"_id":0, "meme1":1, "meme2":1}
     result=db.labs.aggregate([   
-        { "$match":  {"meme": "meme"} }, { "$group": { "_id": "lab"}}, {"$project":projection}])
+        { "$match":  {"meme": "meme1"} }, { "$group": { "_id": "lab"}}, {"$project":projection}])
 
      
     return dumps(result)
@@ -141,7 +153,7 @@ def randomMeme(lab_prefix):
     #Purpose: Get a random meme (extracted from the ones used for each student pull request) for that lab.
 """
 
-    projection = {"_id":0,"meme": 1, "meme1":1, "meme2":1}
+    projection = {"_id":0, "meme1":1}
     result=db.labs.aggregate([  
         { "$sample": {"size": 1} }, 
         { "$match":  {"lab": lab_prefix} }, {"$project":projection}])
