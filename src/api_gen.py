@@ -109,17 +109,32 @@ def searchLab(lab_prefix):
     percentage=round(closed_pr/(opened_pr+closed_pr)*100,2)
 
     #pendiente comprobar para joins y comentarios
-    missing_pr=db.students.find({"$and":[{"lab":lab_prefix},{"pull_request": {"$exists":False}}]}).count()
+    missing_pr=db.students.find({"$and":[{"lab":lab_prefix},{"pull_request":{"$in":[None]}}]}).count()
+    if missing_pr!=(opened_pr+closed_pr):
+        join1=db.students.find({"$and":[{"lab":lab_prefix},{"join1":{"$nin":[None]}}]},{"_id":0,"join1":1})
+        if len(list(join1))>0:
+            missing_pr-=join1.count()
+        join2=db.students.find({"$and":[{"lab":lab_prefix},{"join2":{"$nin":[None]}}]},{"_id":0,"join2":1})
+        if len(list(join2))>0:
+            missing_pr-=join2.count()
+        
+        mentioned1=db.students.find({"$and":[{"lab":lab_prefix},{"mentioned1":{"$nin":[None]}}]},{"_id":0,"mentioned1":1})
+        if len(list(mentioned1))>0 and list(mentioned1)!=list(join1) and list(mentioned1)!=list(join2):
+            missing_pr-=mentioned1.count()
 
-    memes=db.labs.aggregate([   
-        { "$match":  {"lab": lab_prefix} }, { "$group": {" _id": "meme1" } }])
+        mentioned2=db.students.find({"$and":[{"lab":lab_prefix},{"mentioned2":{"$nin":[None]}}]},{"_id":0,"mentioned2":1})
+        if len(list(mentioned2))>0 and list(mentioned2)!=list(join2) and list(mentioned2)!=list(join1):
+            missing_pr-=mentioned2.count()
+       
+  
+    memes=db.labs.find({"$and": [{"lab": lab_prefix},{"meme1":{"$exists":True}}]} , projection )
         
 
     
     result={'-The number of opened PR is': opened_pr,
     '-The number of closed PR is': closed_pr,
-    'The percentage of complteness is': percentage,
-    'Number of PR': missing_pr,
+    'The percentage of completeness is': percentage,
+    'Number of missing PR is': missing_pr,
     'Distinct memes': memes
     
     }
@@ -139,6 +154,7 @@ def memeRanking():
 """
     #pendiente buscar memes y sustituir en match
     projection = {"_id":0, "meme1":1, "meme2":1}
+      
     labs=db.labs.find({'lab':{"$exists":True}})
     result=db.labs.aggregate([   
           {"$project":projection}, { "$group": { "_id": labs}}])
