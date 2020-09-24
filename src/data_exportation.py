@@ -83,21 +83,6 @@ def get_pages_students_labs(i=1):
     return students,labs
 
 
-def get_pages_labs(i=1):
-    """
-        This function takes out every page of pull requests from the previuos get_url query and returns labs JSON objects
-    """
-    labs=[]
-    n_pages=int(re.search(r'\d{2}',re.search(r'\d{2}\>\;\srel="last"',get_pull_requests(i=1).headers['link']).group()).group())
-    for page in range(i,n_pages):
-        try:
-            print(f'Loading page {page}')
-            data=get_pull_requests(i=page).json()
-            labs.append([get_lab(data,i=j) for j in range(0,len(data))])
-            
-        except ValueError:
-            raise ValueError
-    return labs
 
 def get_student(data,i=0): 
     """
