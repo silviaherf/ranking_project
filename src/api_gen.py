@@ -62,7 +62,7 @@ def allStudents():
 @app.route("/lab/create", methods=['POST']) 
 def createLab():
 """   
-    """
+"""
     This endpoint acts with POST method, but does not work in any web browser. Open it with Postman or similar
 
        
@@ -87,12 +87,12 @@ def createLab():
 @app.route("/lab/create")
 @app.route("/lab/create/<lab_prefix>")
 def createLab(lab_prefix):
-        """
+    """
     Purpose: Create a lab to be analyzed.
     Params: The lab-prefix to be analyzed. Example: [lab-scavengers]
     Returns: lab_id
 
-    """
+"""
     params=dict(request.args)
     lab={"name": lab_prefix,**params}
     if not lab_prefix:
