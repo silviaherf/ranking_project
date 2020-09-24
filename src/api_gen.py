@@ -119,16 +119,20 @@ def searchLab(lab_prefix):
         meme1.append(list(meme2))
         memes=meme1
    
-    instructors=db.labs.find({'lab':lab_prefix}).distinct('instructor')
-   # for instructor in instructors:
-        #hours=db.labs.find({'instructor':instructor})
+    instructors=list(db.labs.find({'lab':lab_prefix}).distinct('instructor'))
+    hours={}
+ 
+
+    correction_time=db.labs.aggregate([  {"$match": {'lab':lab_prefix}  },
+            { "$group": {  "_id":"$instructor",   "correction_time": {   "$avg": "$correction_time"     }    }  } ])
+
 
     result={'-The number of opened PR is': opened_pr,
     '-The number of closed PR is': closed_pr,
     'The percentage of completeness is': percentage,
     'Number of missing PR is': missing_pr,
     'Distinct memes': memes,
-    'Instructor grade time': instructors
+    'Instructors mean grade time in hours': correction_time
     
     }
   
