@@ -108,7 +108,7 @@ def searchLab(lab_prefix):
     closed_pr=db.labs.find({"$and":[{"lab":lab_prefix},{"pull_request_status": "closed"}]}).count()
     percentage=round(closed_pr/(opened_pr+closed_pr)*100,2)
 
-    #pendiente comprobar para joins y comentarios
+    
     missing_pr=db.students.find({"$and":[{"lab":lab_prefix},{"pull_request":{"$in":[None]}}]}).count()
     if missing_pr!=(opened_pr+closed_pr):
         join1=db.students.find({"$and":[{"lab":lab_prefix},{"join1":{"$nin":[None]}}]},{"_id":0,"join1":1})
@@ -127,7 +127,18 @@ def searchLab(lab_prefix):
             missing_pr-=mentioned2.count()
        
   
-    memes=db.labs.find({"$and": [{"lab": lab_prefix},{"meme1":{"$exists":True}}]} , projection )
+    
+    
+    meme2=db.labs.find({"$and":[{"lab":lab_prefix},{"meme2":{"$nin":[None]}}]},{"_id":0,"meme2":1})
+    print(len(list(meme2)))
+    meme1=db.labs.find({"$and":[{"lab":lab_prefix},{"meme1":{"$nin":[None]}},{"meme2":{"$in":[None]}}]},{"_id":0,"meme1":1})
+    print(list(meme1))
+    if len(list(meme2))>0:
+        memes=(list(meme1)).append(list(meme2))
+    else:
+        memes=list(meme1)
+   
+
         
 
     
@@ -155,12 +166,14 @@ def memeRanking():
     #pendiente buscar memes y sustituir en match
     projection = {"_id":0, "meme1":1, "meme2":1}
       
-    labs=db.labs.find({'lab':{"$exists":True}})
+    labs=db.labs.find({'lab':{"$exists":True}}).distinct("meme1")
+    
     result=db.labs.aggregate([   
           {"$project":projection}, { "$group": { "_id": labs}}])
 
-     
-    return dumps(result)
+ 
+
+    return dumps(labs)
 
 
 #pendiente condicionales de mem1 y meme2
