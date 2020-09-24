@@ -6,6 +6,7 @@ import re
 from bs4 import BeautifulSoup
 import json
 from src.database import db
+import datetime as dt
 
 
 
@@ -62,21 +63,24 @@ def get_url(url,api_key=os.getenv('GH_APIKEY')):
         return res
 
 
-def get_pages_students(i=1):
+def get_pages_students_labs(i=1):
     """
-        This function takes out every page of pull requests from the previuos get_url query and returns stundets JSON objects
+        This function takes out every page of pull requests from the previuos get_url query and returns stundents and labs JSON objects
     """
     students=[]
+    labs=[]
     n_pages=int(re.search(r'\d{2}',re.search(r'\d{2}\>\;\srel="last"',get_pull_requests(i=1).headers['link']).group()).group())
     for page in range(i,n_pages):
         try:
             print(f'Loading page {page}')
             data=get_pull_requests(i=page).json()
-            students.append([get_student(data,i=j) for j in range(0,len(data))])
+            for j in range(0,len(data)):
+                students.append(get_student(data,i=j))
+                labs.append(get_lab(data,i=j))
             
         except ValueError:
             raise ValueError
-    return students
+    return students,labs
 
 
 def get_pages_labs(i=1):
@@ -145,27 +149,35 @@ def get_lab(data,i=0):
     The parameter needed is data, the selected response as json format.
 
     """
-    if re.search(r'[lab-].*\]',data[i]['title'])!=None:
-        lab=re.search(r'[lab-].*\]',data[i]['title']).group().split(']')[0]
+    if re.search(r'[^lab-].*\]',data[i]['title'])!=None:
+        lab=re.search(r'[^lab-].*\]',data[i]['title']).group().split(']')[0]
     else:
         lab=''
 
-    if re.search(r'lab-\w+',lab)!=None:
-        lab_prefix=re.search(r'lab-\w+',lab).group()
-    else:
-        lab_prefix=''
-
-           
+    pull_request_created_day=re.search(r'\d{4}\-\d{2}\-\d{2}',data[i]['created_at']).group()
+    pull_request_created_time=re.search(r'\d{2}\:\d{2}\:\d{2}',data[i]['created_at']).group()
+       
     if data[i]['state']=='closed':
         pull_request_closed_day=re.search(r'\d{4}\-\d{2}\-\d{2}',data[i]['closed_at']).group()
         pull_request_closed_time=re.search(r'\d{2}\:\d{2}\:\d{2}',data[i]['closed_at']).group()
+        
+        created_day = dt.datetime.strptime(pull_request_created_day, '%Y-%m-%d')
+        closed_day = dt.datetime.strptime(pull_request_closed_day, '%Y-%m-%d')
+        delta_days= (closed_day -  created_day)
+
+        created_time = dt.datetime.strptime(pull_request_created_time, '%H:%M:%S')
+        closed_time = dt.datetime.strptime(pull_request_closed_time, '%H:%M:%S')
+        delta_time= (closed_time - created_time)
+
+        correction_time= (delta_time.total_seconds()+ delta_days.total_seconds())/3600
+
     else:
         pull_request_closed_day=''
         pull_request_closed_time=''
+        
+        correction_time= ''
 
-
-    pull_request_created_day=re.search(r'\d{4}\-\d{2}\-\d{2}',data[i]['created_at']).group()
-    pull_request_created_time=re.search(r'\d{2}\:\d{2}\:\d{2}',data[i]['created_at']).group()
+    
     
     if data[i]['assignees']:
         instructor=data[i]['assignees'][0]['login']
@@ -175,7 +187,6 @@ def get_lab(data,i=0):
     dic={
 
         'lab': lab,
-        'lab_prefix':lab_prefix,
         'pull_request':data[i]['id'],
         'pull_request_status':data[i]['state'],
         'instructor': instructor ,
@@ -183,6 +194,7 @@ def get_lab(data,i=0):
         'pull_request_closed_time': pull_request_closed_time,
         'pull_request_created_day': pull_request_created_day,
         'pull_request_created_time': pull_request_created_time,
+        'correction_time': correction_time
     }
 
     if data[i]['state']=='closed':    
