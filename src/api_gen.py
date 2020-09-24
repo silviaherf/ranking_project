@@ -54,11 +54,45 @@ def allStudents():
 
     return dumps(list(cursor))
 
+    
+    
+    
+"""
+
+@app.route("/lab/create", methods=['POST']) 
+def createLab():
+"""   
+    """
+    This endpoint acts with POST method, but does not work in any web browser. Open it with Postman or similar
+
+       
+    Purpose: Create a lab to be analyzed.
+    Params: The lab-prefix to be analyzed. Example: [lab-scavengers]
+    Returns: lab_id
+"""
+"""
+
+    lab_prefix = request.form.get('lab_prefix')
+        
+    if db.labs.find_one({"lab": lab_prefix}):
+        return 'This lab is already on MongoDB'
+    else:
+        lab_add=export.lab_toMongo(lab)
+        return dumps({"_id": lab_add.inserted_id})
+        
+"""
 
 
+    
 @app.route("/lab/create")
 @app.route("/lab/create/<lab_prefix>")
 def createLab(lab_prefix):
+        """
+    Purpose: Create a lab to be analyzed.
+    Params: The lab-prefix to be analyzed. Example: [lab-scavengers]
+    Returns: lab_id
+
+    """
     params=dict(request.args)
     lab={"name": lab_prefix,**params}
     if not lab_prefix:
