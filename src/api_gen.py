@@ -13,6 +13,13 @@ import random
 
 app = Flask("ranking")
 
+@app.route("/")
+def saludo():
+    return 'Welcome to the DataMad0820 Ranking API'
+
+
+
+
 @app.route("/student/create")
 @app.route("/student/create/<studentname>")
 def createStudent(studentname=None):

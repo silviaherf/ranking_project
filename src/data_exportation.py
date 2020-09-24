@@ -90,15 +90,12 @@ def get_student(data,i=0):
     The parameter needed is data, the selected response as json format.
 
     """
-    if re.search(r'[lab-].*\]',data[i]['title'])!=None:
-        lab=re.search(r'[lab-].*\]',data[i]['title']).group().split(']')[0]
+    
+    if re.search(r'lab-.*',data[i]['title'])!=None:
+        lab=re.search(r'lab.*',data[i]['title']).group().split(']')[0]
     else:
         lab=''
 
-    if re.search(r'lab-\w+',lab)!=None:
-        lab_prefix=re.search(r'lab-\w+',lab).group()
-    else:
-        lab_prefix=''
 
     dic={
         'name':data[i]['user']['login'],
@@ -134,8 +131,8 @@ def get_lab(data,i=0):
     The parameter needed is data, the selected response as json format.
 
     """
-    if re.search(r'[lab-].*\]',data[i]['title'])!=None:
-        lab=re.search(r'[lab-].*\]',data[i]['title']).group().split(']')[0]
+    if re.search(r'lab-.*',data[i]['title'])!=None:
+        lab=re.search(r'lab-.*',data[i]['title']).group().split(']')[0]
     else:
         lab=''
 
