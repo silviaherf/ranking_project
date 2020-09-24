@@ -155,9 +155,12 @@ def randomMeme(lab_prefix):
 
     projection = {"_id":0, "meme1":1}
     result=db.labs.aggregate([  
-        { "$match":  {"lab": lab_prefix} }, 
+        { "$match": { "$and": [{"lab": lab_prefix} ,{"pull_request_status": "closed"}]}}, 
         { "$sample": {"size": 1} }, 
         {"$project":projection}])
     
+  
+
+
     return dumps(result)
 
