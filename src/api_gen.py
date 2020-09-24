@@ -146,22 +146,41 @@ def searchLab(lab_prefix):
 @app.route("/memeranking")
 def memeRanking():
     """
-    #Purpose: Ranking of the most used memes for datamad0820 divided by labs
+    #Purpose: This function returns the most ussed meme for datamad0820 divided by labs
 """
-    #pendiente buscar memes y sustituir en match
     
-    projection = {"_id":0, "meme1":1, "meme2":1}
-
-
-    result=db.labs.aggregate([   
-          {"$project":projection}, { "$group": { "_id": "$lab"}}])
+    result=db.labs.aggregate([
+        { "$group": {  "_id":{"lab":"$lab", "meme":"$meme2"}  ,
+            "count": {
+                "$sum": 1
+            }
+            }
+        },
+        {
+            "$sort": {
+            "_id.meme": 1,
+            "count": 1
+            }
+        },
+        {
+            "$group": {
+            "_id": {
+                "category": "$_id.meme"
+            },
+            "name": {
+                "$first": "$_id.lab"
+            }
+           
+            }
+        }
+        ])
 
     return dumps(result)
 
 
 
 
-#pendiente condicionales de mem1 y meme2
+
 @app.route("/lab/<lab_prefix>/meme")
 def randomMeme(lab_prefix):
     """
