@@ -139,27 +139,27 @@ def memeRanking():
 """
     #pendiente buscar memes y sustituir en match
     projection = {"_id":0, "meme1":1, "meme2":1}
+    labs=db.labs.find({'lab':{"$exists":True}})
     result=db.labs.aggregate([   
-        { "$match":  {"meme": "meme1"} }, { "$group": { "_id": "lab"}}, {"$project":projection}])
+          {"$project":projection}, { "$group": { "_id": labs}}])
 
      
     return dumps(result)
 
 
-
+#pendiente condicionales de mem1 y meme2
 @app.route("/lab/<lab_prefix>/meme")
 def randomMeme(lab_prefix):
     """
     #Purpose: Get a random meme (extracted from the ones used for each student pull request) for that lab.
 """
-
+    
     projection = {"_id":0, "meme1":1}
     result=db.labs.aggregate([  
         { "$match": { "$and": [{"lab": lab_prefix} ,{"pull_request_status": "closed"}]}}, 
         { "$sample": {"size": 1} }, 
         {"$project":projection}])
-    
-  
+
 
 
     return dumps(result)
