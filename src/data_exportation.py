@@ -134,8 +134,8 @@ def get_lab(data,i=0):
     The parameter needed is data, the selected response as json format.
 
     """
-    if re.search(r'[^lab-].*\]',data[i]['title'])!=None:
-        lab=re.search(r'[^lab-].*\]',data[i]['title']).group().split(']')[0]
+    if re.search(r'[lab-].*\]',data[i]['title'])!=None:
+        lab=re.search(r'[lab-].*\]',data[i]['title']).group().split(']')[0]
     else:
         lab=''
 

@@ -67,27 +67,7 @@ def createLab(lab_prefix):
         return dumps({"_id": lab_add.inserted_id})
 
 
-"""
-@app.route("/lab/<lab_prefix>/search")
-def searchLab_Student(lab_prefix):
-    """
-"""
-    Purpose: Search student submissions on specific lab
-    Params: user_id
-    Returns: If PR is open or closed
 
-    """
-"""
-    user_id = request.args.get("user_id","silviaherf")
-    
-    projection = {"name": 1}
-
-    pr=(db.students.find_one({'$and':[ {"name": user_id}, {"lab":lab_prefix}]},{"_id":0,"pull_request":1}))
-    result=db.labs.find( {"pull_request": pr['pull_request']},{"_id":0,"pull_request_status":1})
-
-  
-    return dumps(result)
-"""
 
 @app.route("/lab/<lab_prefix>/search")
 def searchLab(lab_prefix):
@@ -139,12 +119,16 @@ def searchLab(lab_prefix):
         meme1.append(list(meme2))
         memes=meme1
    
-    
+    instructors=db.labs.find({'lab':lab_prefix}).distinct('instructor')
+   # for instructor in instructors:
+        #hours=db.labs.find({'instructor':instructor})
+
     result={'-The number of opened PR is': opened_pr,
     '-The number of closed PR is': closed_pr,
     'The percentage of completeness is': percentage,
     'Number of missing PR is': missing_pr,
-    'Distinct memes': memes
+    'Distinct memes': memes,
+    'Instructor grade time': instructors
     
     }
   
@@ -156,7 +140,6 @@ def searchLab(lab_prefix):
 
 
 @app.route("/memeranking")
-#@asJsonResponse
 def memeRanking():
     """
     #Purpose: Ranking of the most used memes for datamad0820 divided by labs
@@ -170,6 +153,8 @@ def memeRanking():
           {"$project":projection}, { "$group": { "_id": "$lab"}}])
 
     return dumps(result)
+
+
 
 
 #pendiente condicionales de mem1 y meme2
