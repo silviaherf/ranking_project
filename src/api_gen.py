@@ -103,7 +103,7 @@ def searchLab(lab_prefix):
 
 """
         
-    projection = {"_id":0,"meme1": 1}
+    
     opened_pr=db.labs.find({"$and":[{"lab":lab_prefix},{"pull_request_status": "open"}]}).count()
     closed_pr=db.labs.find({"$and":[{"lab":lab_prefix},{"pull_request_status": "closed"}]}).count()
     percentage=round(closed_pr/(opened_pr+closed_pr)*100,2)
@@ -129,18 +129,16 @@ def searchLab(lab_prefix):
   
     
     
-    meme2=db.labs.find({"$and":[{"lab":lab_prefix},{"meme2":{"$nin":[None]}}]},{"_id":0,"meme2":1})
-    print(len(list(meme2)))
-    meme1=db.labs.find({"$and":[{"lab":lab_prefix},{"meme1":{"$nin":[None]}},{"meme2":{"$in":[None]}}]},{"_id":0,"meme1":1})
-    print(list(meme1))
-    if len(list(meme2))>0:
-        memes=(list(meme1)).append(list(meme2))
-    else:
+    meme2=db.labs.find({"$and":[{"lab":lab_prefix},{"meme2":{"$nin":[None]}}]},{"_id":0,"meme2":1}).distinct("meme2")
+    
+    meme1=db.labs.find({"$and":[{"lab":lab_prefix},{"meme1":{"$nin":[None]}},{"meme2":{"$in":[None]}}]},{"_id":0,"meme1":1}).distinct("meme1")
+    if len(list(meme2))==0:
         memes=list(meme1)
+    else:
+        meme1=list(meme1)
+        meme1.append(list(meme2))
+        memes=meme1
    
-
-        
-
     
     result={'-The number of opened PR is': opened_pr,
     '-The number of closed PR is': closed_pr,
@@ -164,16 +162,14 @@ def memeRanking():
     #Purpose: Ranking of the most used memes for datamad0820 divided by labs
 """
     #pendiente buscar memes y sustituir en match
-    projection = {"_id":0, "meme1":1, "meme2":1}
-      
-    labs=db.labs.find({'lab':{"$exists":True}}).distinct("meme1")
     
+    projection = {"_id":0, "meme1":1, "meme2":1}
+
+
     result=db.labs.aggregate([   
-          {"$project":projection}, { "$group": { "_id": labs}}])
+          {"$project":projection}, { "$group": { "_id": "$lab"}}])
 
- 
-
-    return dumps(labs)
+    return dumps(result)
 
 
 #pendiente condicionales de mem1 y meme2
@@ -188,8 +184,6 @@ def randomMeme(lab_prefix):
         { "$match": { "$and": [{"lab": lab_prefix} ,{"pull_request_status": "closed"}]}}, 
         { "$sample": {"size": 1} }, 
         {"$project":projection}])
-
-
 
     return dumps(result)
 
