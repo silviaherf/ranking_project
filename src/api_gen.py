@@ -15,6 +15,9 @@ import base64
 app = Flask("ranking")
 
 @app.route("/")
+
+    #This is just the first view of the API
+   
 def saludo():
   
     return dumps('Welcome to the DataMad0820 Ranking API!!!')
@@ -25,16 +28,17 @@ def saludo():
 @app.route("/student/create/<studentname>")
 def createStudent(studentname=None):
     """
-    Purpose: Create a student and save into DB
-    Params: studentname the student name
-    Returns: student_id
+    Purpose: This endpoint creates a student document and saves into MongoDB students collection. It also updates a student document in MongoDB if it already exists
+    Params: the student's name in Github (his nickname)
+    Queryparams:  any parameter needed by the user
+    Returns: the generated id for that document in MongoDB
     """
     params=dict(request.args)
     student={"name": studentname,**params}
     if not studentname:
         return {
             "status": "error",
-            "message": "Any student in query , please specify one"
+            "message": "No student in query , please specify one"
         }, 400
     if db.students.find_one({"name": studentname}):
         db.students.update_one({"name": studentname},{"$set":student})
@@ -63,12 +67,12 @@ def allStudents():
 def createLab():
    
     """
-    This endpoint acts both with GET or POST method. For POST method, it does not work in any web browser, you must open it with Postman or similar
+    This endpoint acts both with GET or POST method. For POST method, it does not work in any web browser, it must be opened with Postman or similar
 
        
-    Purpose: Create a lab to be analyzed.
-    Params: The lab-prefix to be analyzed. Example: [lab-scavengers]
-    Returns: lab_id
+    Purpose:  This endpoint creates a lab document and saves into MongoDB labs collection. It also updates a lab document in MongoDB if it already exists
+    Params: The lab-prefix to be analyzed (its name). Example: lab-scavengers
+    Returns: the generated id for that document in MongoDB
     
 """
 
@@ -104,13 +108,13 @@ def createLab():
 def searchLab(lab_prefix):
     """
     Purpose: Returns lab analysis
-    Params: lab_prefix->the name of the lab we want information about
+    Params: lab_prefix->the name of the lab we want information about. Example: lab-scavengers
     Returns: Number of open PR
             Number of closed PR
             Percentage of completeness (closed vs open)
-            List number of missing pr from students
-            The list of unique memes used for that lab
-            Instructor grade time in hours: (pr_close_time-last_commit_time)
+            The number of missing PR from students
+            The list of unique url of memes used for that lab
+            Instructor correction time in hours
 
 """
         
@@ -219,6 +223,8 @@ def memeRanking():
 def randomMeme(lab_prefix):
     """
     #Purpose: Get a random meme (extracted from the ones used for each student pull request) for that lab.
+    #Params: The lab-prefix to be analyzed (its name). Example: lab-scavengers
+    #Returns: a random meme
 """
     
     projection = {"_id":0, "meme1":1}
