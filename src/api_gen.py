@@ -62,7 +62,7 @@ def allStudents():
 def createLab():
    
     """
-    This endpoint acts with POST method, but does not work in any web browser. Open it with Postman or similar
+    This endpoint acts both with GET or POST method. For POST method, it does not work in any web browser, you must open it with Postman or similar
 
        
     Purpose: Create a lab to be analyzed.
@@ -73,11 +73,11 @@ def createLab():
 
     if request.method == 'POST':
         lab_prefix = request.form.get('lab_prefix')
-            
+        lab={"lab": lab_prefix}   
         if db.labs.find_one({"lab": lab_prefix}):
             return 'This lab is already on MongoDB'
         else:
-            lab_add=export.lab_toMongo(lab_prefix)
+            lab_add=export.lab_toMongo(lab)
             return dumps({"_id": lab_add.inserted_id})
 
     else:
