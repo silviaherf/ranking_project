@@ -151,7 +151,7 @@ def get_lab(data,i=0):
         closed_time = dt.datetime.strptime(pull_request_closed_time, '%H:%M:%S')
         delta_time= (closed_time - created_time)
 
-        correction_time= (delta_time.total_seconds()+ delta_days.total_seconds())/3600
+        correction_time= round((delta_time.total_seconds()+ delta_days.total_seconds())/3600,2)
 
     else:
         pull_request_closed_day=''
