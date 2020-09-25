@@ -116,7 +116,10 @@ def searchLab(lab_prefix):
     
     opened_pr=db.labs.find({"$and":[{"lab":lab_prefix},{"pull_request_status": "open"}]}).count()
     closed_pr=db.labs.find({"$and":[{"lab":lab_prefix},{"pull_request_status": "closed"}]}).count()
-    percentage=round(closed_pr/(opened_pr+closed_pr)*100,2)
+    if closed_pr!=0:
+        percentage=round(closed_pr/(opened_pr+closed_pr)*100,2)
+    else:
+        percentage='0 closed PR, percentage cannot be calculated'
 
     
     missing_pr=db.students.find({"$and":[{"lab":lab_prefix},{"pull_request":{"$in":[None]}}]}).count()
