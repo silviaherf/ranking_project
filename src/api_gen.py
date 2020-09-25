@@ -9,14 +9,15 @@ from src.database import db
 import src.data_exportation as export
 import json
 from bson.json_util import dumps
-import random
+import base64
+
 
 app = Flask("ranking")
 
 @app.route("/")
 def saludo():
-    return 'Welcome to the DataMad0820 Ranking API'
-
+  
+    return dumps('Welcome to the DataMad0820 Ranking API!!!')
 
 
 
