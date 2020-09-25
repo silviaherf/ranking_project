@@ -22,7 +22,7 @@ The whole project is defined to be runned from the terminal.
 
 1) README.txt: As a resume for the content of the project an its development
 
-2) data_to_bash.py: This file imports the information needed from Github API and exports it to a locally saved bash file
+2) data_to_json.py: This file imports the information needed from Github API and exports it to a locally saved bash file
 
 3) server.py:  It defines the local server where the self-done API will be executed.
 
