@@ -38,7 +38,7 @@ The whole project is defined to be runned from the terminal.
 At the created API, the following endpoints are defined:
 
 
-**/**
+### **/**
 
 This is just the first view of the API
 
@@ -47,7 +47,7 @@ This is just the first view of the API
 "Welcome to the DataMad0820 Ranking API!!!"
 ```
 
-**/student/create/<studentname>**
+### **/student/create/<studentname>**
 
     - Purpose: This endpoint creates a student document and saves into MongoDB students collection. It also updates a student document in MongoDB if it     already exists
     - Params: the student's name in Github (his nickname)
@@ -63,7 +63,7 @@ $oid: "5f6dce76a1e5af306a824187"
 }
 ```
 
-**/student/all**
+### **/student/all**
 
     - Purpose: List all students in database
     - Returns: An array of student objects   
@@ -99,13 +99,15 @@ $oid: "5f6dce76a1e5af306a824187"
 ]
 ```    
 
-**/lab/create**
+### **/lab/create**
         
     This endpoint acts both with GET or POST method. For POST method, it does not work in any web browser, it must be opened with Postman or similar
  
     - Purpose:  This endpoint creates a lab document and saves into MongoDB labs collection. It also updates a lab document in MongoDB if it already exists
     - Params: The lab-prefix to be analyzed (its name). Example: lab-scavengers
     - Returns: the generated id for that document in MongoDB
+
+
 
 ```bash
 
@@ -116,12 +118,9 @@ $oid: "5f6dced4a1e5af306a824188"
 }
 ```
 
-* For POST method:
-```bash
-This lab is already on MongoDB
-```
 
-**/lab/<lab_prefix>/search**
+
+### **/lab/<lab_prefix>/search**
 
     -Purpose: Returns lab analysis
     -Params: lab_prefix->the name of the lab we want information about. Example: lab-scavengers
@@ -132,7 +131,7 @@ This lab is already on MongoDB
             The list of unique url of memes used for that lab
             Instructor correction time in hours
 
-* For GET method:
+
 ```bash
 {
 -The number of opened PR is: 0,
@@ -169,7 +168,7 @@ correction_time: 139.43699999999998
 ```
 
 
-**/memeranking**
+### **/memeranking**
 
     -Purpose: This function returns the most ussed meme for datamad0820 for each lab
 
@@ -203,7 +202,7 @@ name: "lab-mysql-select"
 ... }]
 ```
 
-**/lab/<lab_prefix>/meme**
+### **/lab/<lab_prefix>/meme**
 
     -Purpose: Get a random meme (extracted from the ones used for each student pull request) for that lab.
     -Params: The lab-prefix to be analyzed (its name). Example: lab-scavengers
