@@ -57,55 +57,44 @@ def allStudents():
     
     
     
-"""
 
-@app.route("/lab/create", methods=['POST']) 
+@app.route("/lab/create", methods=['GET', 'POST']) 
 def createLab():
-"""   
-"""
+   
+    """
     This endpoint acts with POST method, but does not work in any web browser. Open it with Postman or similar
 
        
     Purpose: Create a lab to be analyzed.
     Params: The lab-prefix to be analyzed. Example: [lab-scavengers]
     Returns: lab_id
-"""
-"""
-
-    lab_prefix = request.form.get('lab_prefix')
-        
-    if db.labs.find_one({"lab": lab_prefix}):
-        return 'This lab is already on MongoDB'
-    else:
-        lab_add=export.lab_toMongo(lab)
-        return dumps({"_id": lab_add.inserted_id})
-        
-"""
-
-
     
-@app.route("/lab/create")
-@app.route("/lab/create/<lab_prefix>")
-def createLab(lab_prefix):
-    """
-    Purpose: Create a lab to be analyzed.
-    Params: The lab-prefix to be analyzed. Example: [lab-scavengers]
-    Returns: lab_id
-
 """
-    params=dict(request.args)
-    lab={"name": lab_prefix,**params}
-    if not lab_prefix:
-        return {
-            "status": "error",
-            "message": "Any lab-prefix in query , please specify one"
-        }, 400
 
-    if db.labs.find_one({"lab": lab_prefix}):
-        return 'This lab is already on MongoDB'
+    if request.method == 'POST':
+        lab_prefix = request.form.get('lab_prefix')
+            
+        if db.labs.find_one({"lab": lab_prefix}):
+            return 'This lab is already on MongoDB'
+        else:
+            lab_add=export.lab_toMongo(lab_prefix)
+            return dumps({"_id": lab_add.inserted_id})
+
     else:
-        lab_add=export.lab_toMongo(lab)
-        return dumps({"_id": lab_add.inserted_id})
+        lab_prefix=request.args.get("lab_prefix")
+        lab={"lab": lab_prefix}
+        if not lab_prefix:
+            return {
+                "status": "error",
+                "message": "No lab-prefix in query , please specify one"
+            }, 400
+
+        if db.labs.find_one({"lab": lab_prefix}):
+            return 'This lab is already on MongoDB'
+        else:
+            lab_add=export.lab_toMongo(lab)
+            return dumps({"_id": lab_add.inserted_id})    
+        
 
 
 
@@ -113,8 +102,8 @@ def createLab(lab_prefix):
 @app.route("/lab/<lab_prefix>/search")
 def searchLab(lab_prefix):
     """
-    Purpose: Search student submissions on specific lab
-    Params: lab_prefix
+    Purpose: Returns lab analysis
+    Params: lab_prefix->the name of the lab we want information about
     Returns: Number of open PR
             Number of closed PR
             Percentage of completeness (closed vs open)
@@ -187,7 +176,7 @@ def searchLab(lab_prefix):
 @app.route("/memeranking")
 def memeRanking():
     """
-    #Purpose: This function returns the most ussed meme for datamad0820 divided by labs
+    #Purpose: This function returns the most ussed meme for datamad0820 for each lab
 """
     
     result=db.labs.aggregate([
