@@ -11,7 +11,7 @@ This project is developed at the scope of Ironhack's Data Analytics Full-time Bo
 
 The aim of this project is to carry out information about ironhack-datalab's datamad0820 repo, where all students release our labs and tasks over the bootcamp.
 
-The information is requested to Github's API (after signing with key), loaded as JSON, cleaned up along that JSON's structure and submitted to a just-created MongoDB database in two different collections.
+The information is requested to Github's API (after signing with key), loaded as bash, cleaned up along that bash's structure and submitted to a just-created MongoDB database in two different collections.
 
 At last, further functions and analysis are reported by different self-done API endpoints using Flask.
 
@@ -22,13 +22,13 @@ The whole project is defined to be runned from the terminal.
 
 1) README.txt: As a resume for the content of the project an its development
 
-2) data_to_json.py: This file imports the information needed from Github API and exports it to a locally saved JSON file
+2) data_to_bash.py: This file imports the information needed from Github API and exports it to a locally saved bash file
 
 3) server.py:  It defines the local server where the self-done API will be executed.
 
 4) src: It contains relevant files so that the script can be runned. These are .py files:
-    4a) data_exportation.py-> It contains every function that the data_to_json needs so as to clean and fix up the requested data from Github API.
-    4b) data_toMongo.py-> This script generates two new collections in MongoDB (students and labs) from the JSON file exported in the file above
+    4a) data_exportation.py-> It contains every function that the data_to_bash needs so as to clean and fix up the requested data from Github API.
+    4b) data_toMongo.py-> This script generates two new collections in MongoDB (students and labs) from the bash file exported in the file above
     4c) database.py-> It defines the new database in MongoDB that will be created and used to export the previously commented collections
     4d) api_gen.py-> It defines the endpoints of the self-created API
 
@@ -42,7 +42,7 @@ At the created API, the following endpoints are defined:
 
 This is just the first view of the API
 
-```json
+```bash
 
 "Welcome to the DataMad0820 Ranking API!!!"
 ```
@@ -54,7 +54,7 @@ This is just the first view of the API
     - Queryparams:  any parameter needed by the user
     - Returns: the generated id for that document in MongoDB
 
-```json
+```bash
 
 {
 _id: {
@@ -68,7 +68,7 @@ $oid: "5f6dce76a1e5af306a824187"
     - Purpose: List all students in database
     - Returns: An array of student objects   
     
-```json
+```bash
 
 [
 "AnaMA96",
@@ -107,7 +107,7 @@ $oid: "5f6dce76a1e5af306a824187"
     - Params: The lab-prefix to be analyzed (its name). Example: lab-scavengers
     - Returns: the generated id for that document in MongoDB
 
-```json
+```bash
 
 {
 _id: {
@@ -117,7 +117,7 @@ $oid: "5f6dced4a1e5af306a824188"
 ```
 
 * For POST method:
-```json
+```bash
 This lab is already on MongoDB
 ```
 
@@ -133,7 +133,7 @@ This lab is already on MongoDB
             Instructor correction time in hours
 
 * For GET method:
-```json
+```bash
 {
 -The number of opened PR is: 0,
 -The number of closed PR is: 22,
@@ -173,7 +173,7 @@ correction_time: 139.43699999999998
 
     -Purpose: This function returns the most ussed meme for datamad0820 for each lab
 
-```json
+```bash
 
 [
 {
@@ -209,7 +209,7 @@ name: "lab-mysql-select"
     -Params: The lab-prefix to be analyzed (its name). Example: lab-scavengers
     -Returns: a random meme
 
-```json
+```bash
 
 [
 {
