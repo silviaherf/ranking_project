@@ -132,4 +132,6 @@ notas.md
 zz_trash/
 Dockerfile
 requirements.txt
+syncDb.sh
+ranking/
 
