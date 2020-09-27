@@ -13,7 +13,11 @@ The aim of this project is to carry out information about ironhack-datalab's dat
 
 The information is requested to Github's API (after signing with key), loaded as bash, cleaned up along that bash's structure and submitted to a just-created MongoDB database in two different collections.
 
-At last, further functions and analysis are reported by different self-done API endpoints using Flask.
+Then further functions and analysis are reported by different self-done API endpoints using Flask.
+
+At last, a Docker image is created, ir order to deploy the API to Heroku afterwards:
+
+https://rankingdatamad0820.herokuapp.com/ 
 
 The whole project is defined to be runned from the terminal.
 
