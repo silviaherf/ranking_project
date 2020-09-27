@@ -130,4 +130,6 @@ dmypy.json
 notas.md
 .json
 zz_trash/
+Dockerfile
+requirements.txt
 
