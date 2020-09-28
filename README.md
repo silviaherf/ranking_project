@@ -19,6 +19,8 @@ At last, a Docker image is created, ir order to deploy the API to Heroku afterwa
 
 https://rankingdatamad0820.herokuapp.com/ 
 
+For the deployment, a MongoDB Atlas virtual collection is assigned, so that data is not removed by Heroku.
+
 The whole project is defined to be runned from the terminal.
 
 
