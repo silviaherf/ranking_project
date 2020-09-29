@@ -19,8 +19,9 @@ app = Flask("ranking")
     #This is just the first view of the API
    
 def saludo():
-  
-    return dumps('Welcome to the DataMad0820 Ranking API!!!')
+    HtmlFile = open('src/saludo.html', 'r', encoding='utf-8')
+    saludo = HtmlFile.read() 
+    return saludo
 
 
 
